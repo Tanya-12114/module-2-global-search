@@ -71,20 +71,20 @@ export function ResultCard({ entity }: { entity: SearchEntity }) {
     >
       <EntityLogo entity={entity} />
 
-      <div className="min-w-0 flex-1">
+      <div className="min-w-[180px] flex-1">
         <h3 className="truncate text-sm font-medium text-text-primary group-hover:text-white">
           {entity.title}
         </h3>
         <p className="mt-0.5 truncate text-xs text-text-secondary">{entity.description}</p>
       </div>
 
-      <div className="hidden shrink-0 items-center gap-2 sm:flex">
+      <div className="flex shrink-0 items-center gap-2">
         {entity.tags.slice(0, 2).map((tag) => (
           <Badge key={tag}>{tag}</Badge>
         ))}
       </div>
 
-      <div className="hidden w-36 shrink-0 text-right text-xs text-text-tertiary md:block">
+      <div className="w-36 shrink-0 text-right text-xs text-text-tertiary">
         <p className="truncate">{metaSummary(entity)}</p>
         <p className="truncate text-text-tertiary/70">{entity.category}</p>
       </div>

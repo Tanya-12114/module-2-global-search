@@ -6,10 +6,12 @@ import { ResultCard } from "./ResultCard";
 // since a card grid doesn't scale to tens of thousands of results.
 export function ResultsGrid({ items }: { items: SearchEntity[] }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-surface">
-      {items.map((entity) => (
-        <ResultCard key={entity.id} entity={entity} />
-      ))}
+    <div className="overflow-x-auto overflow-y-hidden rounded-lg border border-border bg-surface">
+      <div className="min-w-[640px]">
+        {items.map((entity) => (
+          <ResultCard key={entity.id} entity={entity} />
+        ))}
+      </div>
     </div>
   );
 }
