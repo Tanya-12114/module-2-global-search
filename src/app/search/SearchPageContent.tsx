@@ -56,7 +56,7 @@ export function SearchPageContent() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto mb-6 max-w-2xl">
         <SearchBar initialValue={q} onSubmit={setQuery} autoFocus />
       </div>
@@ -120,7 +120,7 @@ export function SearchPageContent() {
           </div>
         )}
 
-        <section className="flex flex-col gap-6">
+        <section className="flex min-w-0 flex-col gap-6">
           {isLoading && <LoadingState />}
 
           {!isLoading && error && <ErrorState message={error} onRetry={retry} />}

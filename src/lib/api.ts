@@ -19,7 +19,7 @@ import { MOCK_ENTITIES, POPULAR_SEARCH_TERMS } from "./mockData";
 // ---------------------------------------------------------------------------
 
 const NETWORK_DELAY_MS = 380;
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 20;
 
 function delay<T>(value: T, ms = NETWORK_DELAY_MS): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
