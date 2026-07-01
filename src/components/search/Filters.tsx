@@ -16,9 +16,9 @@ export function Filters({ allCategories, selected, onChange }: FiltersProps) {
   }
 
   return (
-    <div className="rounded-lg border border-border bg-surface p-4">
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-medium text-text-primary">Category</h3>
+    <div className="pr-2">
+      <div className="mb-3 flex items-center justify-between border-b border-border pb-3">
+        <h3 className="text-sm font-semibold tracking-tight text-text-primary">Category</h3>
         {selected.length > 0 && (
           <button
             onClick={() => onChange([])}
@@ -28,7 +28,7 @@ export function Filters({ allCategories, selected, onChange }: FiltersProps) {
           </button>
         )}
       </div>
-      <div className="space-y-1">
+      <div className="space-y-0.5 pt-1">
         {allCategories.map((category) => (
           <label
             key={category}

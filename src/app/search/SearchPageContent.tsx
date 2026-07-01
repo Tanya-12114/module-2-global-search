@@ -86,8 +86,8 @@ export function SearchPageContent() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-[220px_1fr]">
-        <aside className="hidden md:block">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-[220px_1fr] md:gap-10">
+        <aside className="hidden md:block md:border-r md:border-border md:pr-4">
           <Filters allCategories={allCategories} selected={categories} onChange={setCategories} />
         </aside>
 
