@@ -37,6 +37,18 @@ export function SearchBar({ initialValue = "", autoFocus, onSubmit }: SearchBarP
     if (autoFocus) inputRef.current?.focus();
   }, [autoFocus]);
 
+  useEffect(() => {
+    function handleShortcut(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+        setIsOpen(true);
+      }
+    }
+    document.addEventListener("keydown", handleShortcut);
+    return () => document.removeEventListener("keydown", handleShortcut);
+  }, []);
+
   function submit(term: string) {
     const trimmed = term.trim();
     if (!trimmed) return;
@@ -80,9 +92,6 @@ export function SearchBar({ initialValue = "", autoFocus, onSubmit }: SearchBarP
             <X size={16} />
           </button>
         )}
-        <kbd className="hidden shrink-0 rounded border border-border px-1.5 py-0.5 text-[11px] text-text-tertiary sm:block">
-          &#8984;K
-        </kbd>
       </div>
 
       {isOpen && (

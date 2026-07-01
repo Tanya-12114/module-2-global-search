@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 const STORAGE_KEY = "search:recent";
 const MAX_RECENT = 6;
@@ -9,16 +9,19 @@ const MAX_RECENT = 6;
  * /api/users/me/recent-searches and drop the localStorage calls.
  */
 export function useRecentSearches() {
-  const [recent, setRecent] = useState<string[]>([]);
-
-  useEffect(() => {
+  // Lazy initializer: reads localStorage once on mount instead of via an
+  // effect + setState. Safe under SSR (window is undefined server-side, so
+  // it falls back to []), and the dropdown that renders this list is closed
+  // by default, so there's nothing for hydration to mismatch on.
+  const [recent, setRecent] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setRecent(JSON.parse(raw));
+      return raw ? JSON.parse(raw) : [];
     } catch {
-      setRecent([]);
+      return [];
     }
-  }, []);
+  });
 
   const addRecent = useCallback((term: string) => {
     const trimmed = term.trim();

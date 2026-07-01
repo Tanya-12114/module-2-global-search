@@ -5,6 +5,7 @@ import { useDebounce } from "./useDebounce";
 
 export function useAutocomplete(rawQuery: string) {
   const query = useDebounce(rawQuery, 250);
+  const trimmedQuery = query.trim();
   const [suggestions, setSuggestions] = useState<AutocompleteSuggestion[]>([]);
   const [popular, setPopular] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,16 +20,20 @@ export function useAutocomplete(rawQuery: string) {
   }, []);
 
   useEffect(() => {
-    if (!query.trim()) {
-      setSuggestions([]);
-      setError(null);
+    if (!trimmedQuery) {
+      // Bump the id so a late response for a since-cleared query is ignored.
+      // No setState here — the empty case is derived below instead.
+      requestId.current += 1;
       return;
     }
     const currentRequest = ++requestId.current;
+    // Same standard fetch-on-deps-change shape as useSearchResults — see the
+    // comment there for why this is suppressed rather than restructured.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true);
     setError(null);
 
-    getAutocomplete(query)
+    getAutocomplete(trimmedQuery)
       .then((results) => {
         if (currentRequest === requestId.current) {
           setSuggestions(results);
@@ -45,7 +50,13 @@ export function useAutocomplete(rawQuery: string) {
           setIsLoading(false);
         }
       });
-  }, [query]);
+  }, [trimmedQuery]);
 
-  return { suggestions, popular, isLoading, error };
+  const isEmpty = !trimmedQuery;
+  return {
+    suggestions: isEmpty ? [] : suggestions,
+    popular,
+    isLoading: isEmpty ? false : isLoading,
+    error: isEmpty ? null : error,
+  };
 }

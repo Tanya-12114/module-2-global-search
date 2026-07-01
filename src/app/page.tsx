@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wrench, Building2, BrainCircuit, Newspaper } from "lucide-react";
+import { Wrench, Building2, BrainCircuit, Newspaper, Layers } from "lucide-react";
 import { SearchBar } from "@/components/search/SearchBar";
 
 const CATEGORY_SHORTCUTS = [
@@ -7,27 +7,17 @@ const CATEGORY_SHORTCUTS = [
   { icon: Building2, label: "Companies", type: "company" },
   { icon: BrainCircuit, label: "Models", type: "model" },
   { icon: Newspaper, label: "News", type: "news" },
+  { icon: Layers, label: "Collections", type: "collection" },
 ];
 
 export default function Home() {
   return (
     <main className="min-h-screen">
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-6xl items-center px-4 py-4 sm:px-6 lg:px-8">
           <Link href="/" className="text-sm font-semibold tracking-tight text-text-primary">
             The&nbsp;AI&nbsp;Signal
           </Link>
-          <nav className="hidden items-center gap-6 text-sm text-text-secondary sm:flex">
-            <Link href="/search" className="hover:text-text-primary">
-              Explore
-            </Link>
-            <Link href="/search?types=collection" className="hover:text-text-primary">
-              Collections
-            </Link>
-            <Link href="/search?types=news" className="hover:text-text-primary">
-              News
-            </Link>
-          </nav>
         </div>
       </header>
 

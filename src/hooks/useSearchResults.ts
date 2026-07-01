@@ -64,6 +64,13 @@ export function useSearchResults() {
 
   useEffect(() => {
     let cancelled = false;
+    // This is the standard "fetch when deps change" effect shape — loading/
+    // error need to flip the instant the query changes, not after the async
+    // call resolves. react-hooks/set-state-in-effect flags it anyway; once
+    // this is wired to the real API, replacing this hook with SWR or
+    // TanStack Query removes the manual state entirely and resolves it for
+    // real instead of suppressing it.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true);
     setError(null);
 
