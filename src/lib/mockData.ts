@@ -59,6 +59,13 @@ const TAG_POOL = [
   "Enterprise", "Self-Hosted", "MCP", "Realtime", "Multimodal", "Fine-tunable",
 ];
 
+function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 function seededRandom(seed: number) {
   let t = seed;
   return () => {
@@ -97,6 +104,7 @@ function buildEntities(): SearchEntity[] {
       id: `${type}-${idCounter++}`,
       type,
       title,
+      slug: slugify(title),
       description,
       category: pick(CATEGORIES, rand),
       tags: pickMany(TAG_POOL, 2 + Math.floor(rand() * 3), rand),

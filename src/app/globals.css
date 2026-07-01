@@ -14,7 +14,7 @@
   /* Text */
   --color-text-primary: #f2f2f5;
   --color-text-secondary: #93939f;
-  --color-text-tertiary: #5c5c68;
+  --color-text-tertiary: #6b6b78;
 
   /* Accent — Linear's exact indigo palette */
   --color-accent: #5e6ad2;
@@ -65,9 +65,11 @@ html {
 body {
   background: var(--color-bg);
   color: var(--color-text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue",
-    Arial, ui-sans-serif, system-ui, sans-serif;
+  font-family: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+    "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
 }
 
 ::selection {

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SearchEntity } from "@/types/entities";
 import { ENTITY_META } from "@/lib/entityMeta";
 import { Badge } from "@/components/ui/Badge";
@@ -24,20 +25,25 @@ function metaSummary(entity: SearchEntity): string {
 }
 
 export function ResultCard({ entity }: { entity: SearchEntity }) {
-  const Icon = ENTITY_META[entity.type].icon;
+  const meta = ENTITY_META[entity.type];
+  const Icon = meta.icon;
+  const href = `${meta.basePath}/${entity.slug}`;
 
   return (
-    <article className="group flex flex-col gap-3 rounded-lg border border-border bg-surface p-4 transition-colors hover:border-border-hover hover:bg-surface-hover">
+    <Link
+      href={href}
+      className="group flex flex-col gap-3 rounded-lg border border-border bg-surface p-4 transition-all hover:-translate-y-0.5 hover:border-border-hover hover:bg-surface-hover hover:shadow-lg hover:shadow-black/20"
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-surface-active text-text-secondary">
+          <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${meta.tint}`}>
             <Icon size={16} />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-text-primary group-hover:text-white">
+            <h3 className="text-sm font-semibold tracking-tight text-text-primary group-hover:text-white">
               {entity.title}
             </h3>
-            <p className="text-xs text-text-tertiary">{ENTITY_META[entity.type].label}</p>
+            <p className="text-xs text-text-tertiary">{meta.label}</p>
           </div>
         </div>
       </div>
@@ -54,6 +60,6 @@ export function ResultCard({ entity }: { entity: SearchEntity }) {
         <span>{metaSummary(entity)}</span>
         <span>{entity.category}</span>
       </div>
-    </article>
+    </Link>
   );
 }

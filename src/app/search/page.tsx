@@ -10,7 +10,7 @@ export default function SearchPage() {
       fallback={
         <>
           <header className="border-b border-border">
-            <div className="mx-auto flex max-w-6xl items-center px-4 py-3 sm:px-6 lg:px-8">
+            <div className="flex items-center px-4 py-3 sm:px-6">
               <Link
                 href="/"
                 aria-label="Back to home"

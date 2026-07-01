@@ -11,6 +11,7 @@ export interface SearchEntity {
   id: string;
   type: EntityType;
   title: string;
+  slug: string; // used to build the link to this entity's own detail page
   description: string;
   imageUrl?: string;
   category: string;
