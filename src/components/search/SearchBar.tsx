@@ -50,7 +50,7 @@ export function SearchBar({ initialValue = "", autoFocus, onSubmit }: SearchBarP
   }
 
   return (
-    <div ref={containerRef} className="relative w-full">
+    <div ref={containerRef} className="relative w-full text-left">
       <div className="flex items-center gap-2.5 rounded-lg border border-border bg-surface px-3.5 py-2.5 transition-colors focus-within:border-border-hover">
         <Search size={18} className="shrink-0 text-text-tertiary" />
         <input

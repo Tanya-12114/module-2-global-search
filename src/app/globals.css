@@ -8,7 +8,7 @@
   --color-surface-active: #212129;
 
   /* Borders */
-  --color-border: #232329;
+  --color-border: #222326; /* Linear's near-black */
   --color-border-hover: #2e2e37;
 
   /* Text */
@@ -16,10 +16,14 @@
   --color-text-secondary: #93939f;
   --color-text-tertiary: #5c5c68;
 
-  /* Accent (Linear-esque indigo/violet) */
-  --color-accent: #6e62f5;
-  --color-accent-hover: #8177ff;
-  --color-accent-soft: rgba(110, 98, 245, 0.14);
+  /* Accent — Linear's exact indigo palette */
+  --color-accent: #5e6ad2;
+  --color-accent-hover: #8299ff;
+  --color-accent-soft: rgba(94, 106, 210, 0.14);
+
+  /* CRED-style bold highlight — used sparingly, flat + high contrast */
+  --color-highlight: #c9f31d;
+  --color-highlight-text: #0a0a0d;
 
   /* Status */
   --color-success: #34d399;
@@ -43,6 +47,8 @@
   --color-accent: var(--color-accent);
   --color-accent-hover: var(--color-accent-hover);
   --color-accent-soft: var(--color-accent-soft);
+  --color-highlight: var(--color-highlight);
+  --color-highlight-text: var(--color-highlight-text);
   --color-success: var(--color-success);
   --color-warning: var(--color-warning);
   --color-danger: var(--color-danger);
@@ -100,4 +106,29 @@ body {
   );
   background-size: 800px 100%;
   animation: shimmer 1.6s linear infinite;
+}
+
+.hero-glow {
+  background: radial-gradient(
+    600px 300px at 50% 0%,
+    rgba(94, 106, 210, 0.2),
+    transparent 70%
+  );
+}
+
+/* CRED / NeoPOP signature: flat fill, hard border, offset shadow — no blur, no gradient */
+.btn-neopop {
+  background: var(--color-highlight);
+  color: var(--color-highlight-text);
+  border: 1.5px solid var(--color-highlight-text);
+  box-shadow: 3px 3px 0 var(--color-highlight-text);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn-neopop:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--color-highlight-text);
+}
+.btn-neopop:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--color-highlight-text);
 }
