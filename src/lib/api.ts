@@ -127,3 +127,19 @@ export async function getSearchResults(
 export function getAllCategories(): string[] {
   return Array.from(new Set(MOCK_ENTITIES.map((e) => e.category))).sort();
 }
+
+/**
+ * Fetches a single entity for its detail page.
+ * Real equivalent: GET /api/{type}/{slug} — e.g. /api/tools/pixelforge
+ * This exists in Module 2 only as a temporary stand-in so links out of
+ * search results resolve to *something* while Modules 3–10 build out
+ * their real detail pages. Safe to delete once those exist.
+ */
+export async function getEntityBySlug(
+  type: EntityType,
+  slug: string
+): Promise<SearchEntity | null> {
+  maybeFail();
+  const entity = MOCK_ENTITIES.find((e) => e.type === type && e.slug === slug);
+  return delay(entity ?? null, 200);
+}
