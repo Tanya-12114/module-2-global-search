@@ -1,9 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getSearchResults } from "@/lib/api";
-import { EntityType, PaginatedResult, SearchEntity, SortOption } from "@/types/entities";
+import {
+  EntityType,
+  PaginatedResult,
+  SearchEntity,
+  SearchView,
+  SortOption,
+  TimeRange,
+} from "@/types/entities";
 
 const VALID_SORTS: SortOption[] = ["relevance", "newest", "popular", "az"];
+const VALID_VIEWS: SearchView[] = ["forYou", "trending", "leaderboard"];
+const VALID_RANGES: TimeRange[] = ["today", "week", "month"];
 
 function parseTypes(param: string | null): EntityType[] {
   if (!param) return [];
@@ -27,6 +36,10 @@ export function useSearchResults() {
   );
   const sort = (searchParams.get("sort") as SortOption) ?? "relevance";
   const safeSort = VALID_SORTS.includes(sort) ? sort : "relevance";
+  const view = (searchParams.get("view") as SearchView) ?? "forYou";
+  const safeView = VALID_VIEWS.includes(view) ? view : "forYou";
+  const range = (searchParams.get("range") as TimeRange) ?? "week";
+  const safeRange = VALID_RANGES.includes(range) ? range : "week";
   const page = Number(searchParams.get("page") ?? "1") || 1;
 
   const [data, setData] = useState<PaginatedResult<SearchEntity> | null>(null);
@@ -65,6 +78,8 @@ export function useSearchResults() {
     [updateParams]
   );
   const setSort = useCallback((value: SortOption) => updateParams({ sort: value }), [updateParams]);
+  const setView = useCallback((value: SearchView) => updateParams({ view: value }), [updateParams]);
+  const setRange = useCallback((value: TimeRange) => updateParams({ range: value }), [updateParams]);
   const setPage = useCallback(
     (value: number) => updateParams({ page: String(value) }, false),
     [updateParams]
@@ -82,7 +97,7 @@ export function useSearchResults() {
     setIsLoading(true);
     setError(null);
 
-    getSearchResults({ q, types, categories, pricing, sort: safeSort, page })
+    getSearchResults({ q, types, categories, pricing, sort: safeSort, view: safeView, range: safeRange, page })
       .then((result) => {
         if (!cancelled) setData(result);
       })
@@ -97,7 +112,17 @@ export function useSearchResults() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, types.join(","), categories.join(","), pricing.join(","), safeSort, page, retryToken]);
+  }, [
+    q,
+    types.join(","),
+    categories.join(","),
+    pricing.join(","),
+    safeSort,
+    safeView,
+    safeRange,
+    page,
+    retryToken,
+  ]);
 
   return {
     q,
@@ -105,6 +130,8 @@ export function useSearchResults() {
     categories,
     pricing,
     sort: safeSort,
+    view: safeView,
+    range: safeRange,
     page,
     data,
     isLoading,
@@ -115,6 +142,8 @@ export function useSearchResults() {
     setCategories,
     setPricing,
     setSort,
+    setView,
+    setRange,
     setPage,
   };
 }

@@ -5,9 +5,9 @@ import { SlidersHorizontal, X } from "lucide-react";
 import { SearchBar } from "@/components/search/SearchBar";
 import { EntityTabs } from "@/components/search/EntityTabs";
 import { Filters } from "@/components/search/Filters";
-import { SortSelect } from "@/components/search/SortSelect";
+import { ViewTabs } from "@/components/search/ViewTabs";
 import { Pagination } from "@/components/search/Pagination";
-import { ResultsGrid } from "@/components/search/ResultsGrid";
+import { ResultsTable } from "@/components/search/ResultsTable";
 import { LoadingState } from "@/components/search/states/LoadingState";
 import { EmptyState } from "@/components/search/states/EmptyState";
 import { ErrorState } from "@/components/search/states/ErrorState";
@@ -22,6 +22,8 @@ export function SearchPageContent() {
     categories,
     pricing,
     sort,
+    view,
+    range,
     page,
     data,
     isLoading,
@@ -32,6 +34,8 @@ export function SearchPageContent() {
     setCategories,
     setPricing,
     setSort,
+    setView,
+    setRange,
     setPage,
   } = useSearchResults();
 
@@ -53,19 +57,19 @@ export function SearchPageContent() {
   }, [q, categories.join(","), pricing.join(",")]);
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto mb-6 max-w-2xl">
         <SearchBar initialValue={q} onSubmit={setQuery} autoFocus />
       </div>
 
       <div className="mb-6 flex flex-col gap-4">
         <EntityTabs selected={types} onChange={setTypes} counts={typeCounts} />
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-text-secondary">
             {isLoading ? "Searching…" : `${data?.total ?? 0} results`}
             {q && !isLoading ? <> for &ldquo;{q}&rdquo;</> : null}
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setIsFilterDrawerOpen(true)}
               className="flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm text-text-secondary hover:border-border-hover hover:text-text-primary md:hidden"
@@ -78,7 +82,14 @@ export function SearchPageContent() {
                 </span>
               )}
             </button>
-            <SortSelect value={sort} onChange={setSort} />
+            <ViewTabs
+              view={view}
+              range={range}
+              sort={sort}
+              onViewChange={setView}
+              onRangeChange={setRange}
+              onSortChange={setSort}
+            />
           </div>
         </div>
       </div>
@@ -102,7 +113,10 @@ export function SearchPageContent() {
             <LoadingState />
           ) : data && data.items.length > 0 ? (
             <>
-              <ResultsGrid items={data.items} />
+              <ResultsTable
+                items={data.items}
+                startRank={(data.page - 1) * data.pageSize + 1}
+              />
               <div className="mt-8">
                 <Pagination
                   page={data.page}

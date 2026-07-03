@@ -3,7 +3,9 @@ import {
   EntityType,
   PaginatedResult,
   SearchEntity,
+  SearchView,
   SortOption,
+  TimeRange,
 } from "@/types/entities";
 import { MOCK_ENTITIES, POPULAR_SEARCH_TERMS, PRICING_OPTIONS } from "./mockData";
 
@@ -66,15 +68,27 @@ export interface SearchQueryParams {
   categories: string[];
   pricing?: string[];
   sort: SortOption;
+  /** "trending" and "leaderboard" rank by popularity; "forYou" uses `sort`. */
+  view?: SearchView;
+  /** Date window applied only when view is "trending" or "leaderboard". */
+  range?: TimeRange;
   page: number;
 }
+
+const RANGE_TO_DAYS: Record<TimeRange, number> = {
+  today: 1,
+  week: 7,
+  month: 30,
+};
 
 export async function getSearchResults(
   params: SearchQueryParams
 ): Promise<PaginatedResult<SearchEntity>> {
   maybeFail();
-  const { q, types, categories, pricing = [], sort, page } = params;
+  const { q, types, categories, pricing = [], sort, view = "forYou", range = "week", page } = params;
   const query = q.trim().toLowerCase();
+  const isRankedView = view === "trending" || view === "leaderboard";
+  const cutoff = Date.now() - RANGE_TO_DAYS[range] * 24 * 60 * 60 * 1000;
 
   let items = MOCK_ENTITIES.filter((e) => {
     const matchesQuery =
@@ -88,29 +102,35 @@ export async function getSearchResults(
     const matchesPricing =
       pricing.length === 0 ||
       (typeof e.meta.pricing === "string" && pricing.includes(e.meta.pricing));
-    return matchesQuery && matchesType && matchesCategory && matchesPricing;
+    // Trending is scoped to the selected time window; Leaderboard is all-time.
+    const matchesRange = view !== "trending" || new Date(e.createdAt).getTime() >= cutoff;
+    return matchesQuery && matchesType && matchesCategory && matchesPricing && matchesRange;
   });
 
-  switch (sort) {
-    case "newest":
-      items = items.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-      break;
-    case "popular":
-      items = items.sort((a, b) => b.popularityScore - a.popularityScore);
-      break;
-    case "az":
-      items = items.sort((a, b) => a.title.localeCompare(b.title));
-      break;
-    default:
-      // relevance: exact/starts-with title matches first, then popularity
-      items = items.sort((a, b) => {
-        const aScore = a.title.toLowerCase().startsWith(query) ? 1 : 0;
-        const bScore = b.title.toLowerCase().startsWith(query) ? 1 : 0;
-        if (aScore !== bScore) return bScore - aScore;
-        return b.popularityScore - a.popularityScore;
-      });
+  if (isRankedView) {
+    items = items.sort((a, b) => b.popularityScore - a.popularityScore);
+  } else {
+    switch (sort) {
+      case "newest":
+        items = items.sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        break;
+      case "popular":
+        items = items.sort((a, b) => b.popularityScore - a.popularityScore);
+        break;
+      case "az":
+        items = items.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      default:
+        // relevance: exact/starts-with title matches first, then popularity
+        items = items.sort((a, b) => {
+          const aScore = a.title.toLowerCase().startsWith(query) ? 1 : 0;
+          const bScore = b.title.toLowerCase().startsWith(query) ? 1 : 0;
+          if (aScore !== bScore) return bScore - aScore;
+          return b.popularityScore - a.popularityScore;
+        });
+    }
   }
 
   const total = items.length;
