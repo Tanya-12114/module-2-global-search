@@ -21,6 +21,18 @@ function metaSummary(entity: SearchEntity): string {
       return `★ ${entity.meta.stars ?? 0} · ${entity.meta.language ?? ""}`;
     case "collection":
       return String(entity.meta.curator ?? "");
+    case "task":
+      return `${entity.meta.toolCount ?? 0} tools`;
+    case "country":
+      return `${entity.meta.toolCount ?? 0} tools · ${entity.meta.companyCount ?? 0} companies`;
+    case "fundraise":
+      return `${entity.meta.amount ?? ""} · ${entity.meta.round ?? ""}`;
+    case "investor":
+      return `${entity.meta.portfolioSize ?? 0} investments · ${entity.meta.focus ?? ""}`;
+    case "robot":
+      return String(entity.meta.category ?? "");
+    case "device":
+      return String(entity.meta.pricing ?? "");
     default:
       return "";
   }

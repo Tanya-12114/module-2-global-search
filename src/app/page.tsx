@@ -1,18 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Wrench, Building2, BrainCircuit, Newspaper, Layers } from "lucide-react";
 import { HeroSearchTrigger } from "@/components/search/HeroSearchTrigger";
+import { getEntityTypeCounts } from "@/lib/api";
+import { EntityType } from "@/types/entities";
 
 const CATEGORY_SHORTCUTS = [
-  { icon: Wrench, label: "AI Tools", type: "tool" },
-  { icon: Building2, label: "Companies", type: "company" },
-  { icon: BrainCircuit, label: "Models", type: "model" },
-  { icon: Newspaper, label: "News", type: "news" },
-  { icon: Layers, label: "Collections", type: "collection" },
+  { icon: Wrench, label: "AI Tools", type: "tool" as EntityType },
+  { icon: Building2, label: "Companies", type: "company" as EntityType },
+  { icon: BrainCircuit, label: "Models", type: "model" as EntityType },
+  { icon: Newspaper, label: "News", type: "news" as EntityType },
+  { icon: Layers, label: "Collections", type: "collection" as EntityType },
 ];
 
 export default function Home() {
+  const [counts, setCounts] = useState<Partial<Record<EntityType, number>>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    getEntityTypeCounts({ q: "", categories: [] }).then((result) => {
+      if (!cancelled) setCounts(result);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <main className="min-h-screen">
       <section className="hero-glow">
@@ -55,6 +70,9 @@ export default function Home() {
               >
                 <Icon size={14} />
                 {label}
+                {counts[type] !== undefined && (
+                  <span className="text-text-tertiary">{counts[type]!.toLocaleString()}</span>
+                )}
               </Link>
             ))}
           </div>

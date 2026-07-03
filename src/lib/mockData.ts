@@ -48,6 +48,31 @@ const COLLECTION_NAMES = [
   "Best AI Tools for Developers", "Best AI Agents 2026", "Best AI for Marketing Teams",
   "Best Free AI Tools", "Best AI Coding Assistants", "Best AI for Solo Founders",
 ];
+const TASK_NAMES = [
+  "Summarize a document", "Generate marketing copy", "Transcribe a meeting",
+  "Remove background from an image", "Write unit tests", "Translate a webpage",
+  "Build a chatbot", "Clean a spreadsheet", "Generate a voiceover", "Detect anomalies in data",
+];
+const COUNTRY_NAMES = [
+  "United States", "United Kingdom", "India", "Germany", "Singapore",
+  "Canada", "France", "Japan", "Israel", "Netherlands",
+];
+const FUNDRAISE_TITLES = [
+  "Basalt Labs raises $40M Series B", "Cobalt Intelligence closes $12M seed round",
+  "Halcyon AI secures $85M Series C", "Driftwood AI raises $6M pre-seed",
+  "Ironclad Systems raises $150M growth round", "Solace Labs closes $22M Series A",
+];
+const INVESTOR_NAMES = [
+  "Northbridge Ventures", "Cascade Capital", "Anchorpoint Partners", "Fieldstone Capital",
+  "Greywolf Ventures", "Lighthouse Growth", "Summit Peak Capital", "Vantage Point Partners",
+];
+const ROBOT_NAMES = [
+  "Atlas-X", "Kinera One", "Helix R1", "Sentry Bot", "Orbit Mini", "Forge Arm-2",
+];
+const DEVICE_NAMES = [
+  "PixelFrame Pin", "EchoBand Wearable", "SnapLens Glasses", "VoiceOrb Speaker",
+  "PocketCompanion", "DeskMate Hub",
+];
 
 const CATEGORIES = [
   "Writing", "Coding", "Image Generation", "Video", "Audio", "Productivity",
@@ -58,6 +83,8 @@ const TAG_POOL = [
   "API", "Open Source", "Free Tier", "Agents", "No Signup", "Automation",
   "Enterprise", "Self-Hosted", "MCP", "Realtime", "Multimodal", "Fine-tunable",
 ];
+
+export const PRICING_OPTIONS = ["Free", "Freemium", "Paid", "Free Trial"];
 
 function slugify(title: string): string {
   return title
@@ -159,6 +186,47 @@ function buildEntities(): SearchEntity[] {
   COLLECTION_NAMES.forEach((name) =>
     push("collection", name, `A curated list of the tools worth trying this quarter, updated monthly.`, {
       curator: "Editorial Team",
+    })
+  );
+
+  TASK_NAMES.forEach((name) =>
+    push("task", name, `Browse AI tools that can help you ${name.toLowerCase()}, ranked by popularity.`, {
+      toolCount: 10 + Math.floor(rand() * 200),
+    })
+  );
+
+  COUNTRY_NAMES.forEach((name) =>
+    push("country", name, `AI tools and companies founded or headquartered in ${name}.`, {
+      toolCount: 20 + Math.floor(rand() * 500),
+      companyCount: 5 + Math.floor(rand() * 120),
+    })
+  );
+
+  FUNDRAISE_TITLES.forEach((title) =>
+    push("fundraise", title, `${title}. The round will be used to accelerate product development and hiring.`, {
+      amount: `$${(1 + Math.floor(rand() * 150))}M`,
+      round: pick(["Pre-seed", "Seed", "Series A", "Series B", "Series C"], rand),
+    })
+  );
+
+  INVESTOR_NAMES.forEach((name) =>
+    push("investor", name, `${name} is a venture capital firm investing in early and growth-stage AI companies.`, {
+      portfolioSize: 10 + Math.floor(rand() * 200),
+      focus: pick(["Seed", "Early Stage", "Growth", "Multi-stage"], rand),
+    })
+  );
+
+  ROBOT_NAMES.forEach((name) =>
+    push("robot", name, `${name} is an AI-powered robot designed for real-world automation tasks.`, {
+      manufacturer: pick(COMPANY_NAMES, rand),
+      category: pick(["Humanoid", "Industrial Arm", "Mobile", "Drone"], rand),
+    })
+  );
+
+  DEVICE_NAMES.forEach((name) =>
+    push("device", name, `${name} is an AI-enabled hardware device built for everyday use.`, {
+      pricing: pick(PRICING_OPTIONS, rand),
+      formFactor: pick(["Wearable", "Handheld", "Desktop", "Glasses"], rand),
     })
   );
 

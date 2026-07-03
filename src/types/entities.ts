@@ -5,7 +5,13 @@ export type EntityType =
   | "news"
   | "video"
   | "repository"
-  | "collection";
+  | "collection"
+  | "task"
+  | "country"
+  | "fundraise"
+  | "investor"
+  | "robot"
+  | "device";
 
 export interface SearchEntity {
   id: string;
@@ -26,12 +32,14 @@ export type SortOption = "relevance" | "newest" | "popular" | "az";
 export interface SearchFilters {
   types: EntityType[];
   categories: string[];
+  pricing: string[];
 }
 
 export interface SearchParamsState {
   q: string;
   types: EntityType[];
   categories: string[];
+  pricing: string[];
   sort: SortOption;
   page: number;
 }

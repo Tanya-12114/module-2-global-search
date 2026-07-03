@@ -78,16 +78,3 @@ function formatLabel(key: string): string {
   const spaced = key.replace(/([A-Z])/g, " $1");
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
-
-function moduleNumberFor(type: EntityType): number {
-  const map: Record<EntityType, number> = {
-    tool: 3,
-    company: 4,
-    model: 5,
-    news: 8,
-    video: 9,
-    repository: 10,
-    collection: 7,
-  };
-  return map[type];
-}

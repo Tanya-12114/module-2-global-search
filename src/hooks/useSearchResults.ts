@@ -21,6 +21,10 @@ export function useSearchResults() {
     () => parseTypes(searchParams.get("categories")) as unknown as string[],
     [searchParams]
   );
+  const pricing = useMemo(
+    () => parseTypes(searchParams.get("pricing")) as unknown as string[],
+    [searchParams]
+  );
   const sort = (searchParams.get("sort") as SortOption) ?? "relevance";
   const safeSort = VALID_SORTS.includes(sort) ? sort : "relevance";
   const page = Number(searchParams.get("page") ?? "1") || 1;
@@ -56,6 +60,10 @@ export function useSearchResults() {
     (value: string[]) => updateParams({ categories: value.length ? value.join(",") : null }),
     [updateParams]
   );
+  const setPricing = useCallback(
+    (value: string[]) => updateParams({ pricing: value.length ? value.join(",") : null }),
+    [updateParams]
+  );
   const setSort = useCallback((value: SortOption) => updateParams({ sort: value }), [updateParams]);
   const setPage = useCallback(
     (value: number) => updateParams({ page: String(value) }, false),
@@ -74,7 +82,7 @@ export function useSearchResults() {
     setIsLoading(true);
     setError(null);
 
-    getSearchResults({ q, types, categories, sort: safeSort, page })
+    getSearchResults({ q, types, categories, pricing, sort: safeSort, page })
       .then((result) => {
         if (!cancelled) setData(result);
       })
@@ -89,12 +97,13 @@ export function useSearchResults() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, types.join(","), categories.join(","), safeSort, page, retryToken]);
+  }, [q, types.join(","), categories.join(","), pricing.join(","), safeSort, page, retryToken]);
 
   return {
     q,
     types,
     categories,
+    pricing,
     sort: safeSort,
     page,
     data,
@@ -104,6 +113,7 @@ export function useSearchResults() {
     setQuery,
     setTypes,
     setCategories,
+    setPricing,
     setSort,
     setPage,
   };

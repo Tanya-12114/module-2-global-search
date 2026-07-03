@@ -6,6 +6,12 @@ import {
   Video,
   GitBranch,
   Layers,
+  ListChecks,
+  Globe2,
+  Rocket,
+  Landmark,
+  Bot,
+  Cpu,
   LucideIcon,
 } from "lucide-react";
 import { EntityType } from "@/types/entities";
@@ -79,6 +85,54 @@ export const ENTITY_META: Record<
     tint: "bg-lime-500/10 text-lime-300",
     solidColor: "#65A30D",
   },
+  task: {
+    label: "Task",
+    plural: "Tasks",
+    icon: ListChecks,
+    basePath: "/tasks",
+    tint: "bg-orange-500/10 text-orange-300",
+    solidColor: "#EA580C",
+  },
+  country: {
+    label: "Country",
+    plural: "Countries",
+    icon: Globe2,
+    basePath: "/countries",
+    tint: "bg-teal-500/10 text-teal-300",
+    solidColor: "#0D9488",
+  },
+  fundraise: {
+    label: "Fundraise",
+    plural: "Fundraises",
+    icon: Rocket,
+    basePath: "/fundraises",
+    tint: "bg-rose-500/10 text-rose-300",
+    solidColor: "#E11D48",
+  },
+  investor: {
+    label: "Investor",
+    plural: "Investors",
+    icon: Landmark,
+    basePath: "/investors",
+    tint: "bg-yellow-500/10 text-yellow-300",
+    solidColor: "#CA8A04",
+  },
+  robot: {
+    label: "Robot",
+    plural: "Robots",
+    icon: Bot,
+    basePath: "/robots",
+    tint: "bg-cyan-500/10 text-cyan-300",
+    solidColor: "#0891B2",
+  },
+  device: {
+    label: "Device",
+    plural: "Devices",
+    icon: Cpu,
+    basePath: "/devices",
+    tint: "bg-fuchsia-500/10 text-fuchsia-300",
+    solidColor: "#C026D3",
+  },
 };
 
 export const ALL_ENTITY_TYPES: EntityType[] = [
@@ -89,4 +143,10 @@ export const ALL_ENTITY_TYPES: EntityType[] = [
   "video",
   "repository",
   "collection",
+  "task",
+  "country",
+  "fundraise",
+  "investor",
+  "robot",
+  "device",
 ];

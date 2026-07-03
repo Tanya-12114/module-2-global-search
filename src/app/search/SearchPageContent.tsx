@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { SearchBar } from "@/components/search/SearchBar";
 import { EntityTabs } from "@/components/search/EntityTabs";
@@ -12,13 +12,15 @@ import { LoadingState } from "@/components/search/states/LoadingState";
 import { EmptyState } from "@/components/search/states/EmptyState";
 import { ErrorState } from "@/components/search/states/ErrorState";
 import { useSearchResults } from "@/hooks/useSearchResults";
-import { getAllCategories } from "@/lib/api";
+import { getAllCategories, getAllPricingOptions, getEntityTypeCounts } from "@/lib/api";
+import { EntityType } from "@/types/entities";
 
 export function SearchPageContent() {
   const {
     q,
     types,
     categories,
+    pricing,
     sort,
     page,
     data,
@@ -28,13 +30,27 @@ export function SearchPageContent() {
     setQuery,
     setTypes,
     setCategories,
+    setPricing,
     setSort,
     setPage,
   } = useSearchResults();
 
   const allCategories = useMemo(() => getAllCategories(), []);
-  const hasActiveFilters = types.length > 0 || categories.length > 0;
+  const allPricing = useMemo(() => getAllPricingOptions(), []);
+  const hasActiveFilters = types.length > 0 || categories.length > 0 || pricing.length > 0;
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [typeCounts, setTypeCounts] = useState<Partial<Record<EntityType, number>>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    getEntityTypeCounts({ q, categories, pricing }).then((counts) => {
+      if (!cancelled) setTypeCounts(counts);
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, categories.join(","), pricing.join(",")]);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -43,7 +59,7 @@ export function SearchPageContent() {
       </div>
 
       <div className="mb-6 flex flex-col gap-4">
-        <EntityTabs selected={types} onChange={setTypes} />
+        <EntityTabs selected={types} onChange={setTypes} counts={typeCounts} />
         <div className="flex items-center justify-between">
           <p className="text-sm text-text-secondary">
             {isLoading ? "Searching…" : `${data?.total ?? 0} results`}
@@ -56,9 +72,9 @@ export function SearchPageContent() {
             >
               <SlidersHorizontal size={14} />
               Filters
-              {categories.length > 0 && (
+              {categories.length + pricing.length > 0 && (
                 <span className="rounded-full bg-accent-soft px-1.5 text-xs text-accent">
-                  {categories.length}
+                  {categories.length + pricing.length}
                 </span>
               )}
             </button>
@@ -73,6 +89,9 @@ export function SearchPageContent() {
             allCategories={allCategories}
             selected={categories}
             onChange={setCategories}
+            allPricing={allPricing}
+            selectedPricing={pricing}
+            onPricingChange={setPricing}
           />
         </aside>
 
@@ -99,6 +118,7 @@ export function SearchPageContent() {
               onClearFilters={() => {
                 setTypes([]);
                 setCategories([]);
+                setPricing([]);
               }}
             />
           )}
@@ -127,6 +147,9 @@ export function SearchPageContent() {
               allCategories={allCategories}
               selected={categories}
               onChange={setCategories}
+              allPricing={allPricing}
+              selectedPricing={pricing}
+              onPricingChange={setPricing}
             />
           </div>
         </div>
