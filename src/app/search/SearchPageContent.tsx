@@ -1,8 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 import { SearchBar } from "@/components/search/SearchBar";
 import { EntityTabs } from "@/components/search/EntityTabs";
 import { Filters } from "@/components/search/Filters";
@@ -39,23 +38,6 @@ export function SearchPageContent() {
 
   return (
     <>
-      {/*
-        Standalone-shell header, just so this module is navigable on its
-        own. Module 1 owns the real site header/nav — swap this block for
-        theirs (or delete it) once the modules are integrated.
-      */}
-      <header className="border-b border-border">
-        <div className="flex items-center px-4 py-3 sm:px-6">
-          <Link
-            href="/"
-            aria-label="Back to home"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-hover hover:bg-surface-hover hover:text-text-primary"
-          >
-            <ArrowLeft size={17} />
-          </Link>
-        </div>
-      </header>
-
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto mb-6 max-w-2xl">
         <SearchBar initialValue={q} onSubmit={setQuery} autoFocus />
@@ -86,48 +68,34 @@ export function SearchPageContent() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-[220px_1fr] md:gap-10">
-        <aside className="hidden md:block md:border-r md:border-border md:pr-4">
-          <Filters allCategories={allCategories} selected={categories} onChange={setCategories} />
+      <div className="flex gap-8">
+        <aside className="hidden w-56 shrink-0 md:block">
+          <Filters
+            allCategories={allCategories}
+            selected={categories}
+            onChange={setCategories}
+          />
         </aside>
 
-        {isFilterDrawerOpen && (
-          <div className="fixed inset-0 z-40 flex md:hidden">
-            <div
-              className="absolute inset-0 bg-black/60"
-              onClick={() => setIsFilterDrawerOpen(false)}
-              aria-hidden="true"
-            />
-            <div className="relative ml-auto flex h-full w-[85%] max-w-xs flex-col gap-4 overflow-y-auto bg-bg p-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-medium text-text-primary">Filters</h2>
-                <button
-                  onClick={() => setIsFilterDrawerOpen(false)}
-                  aria-label="Close filters"
-                  className="rounded-md p-1 text-text-tertiary hover:text-text-primary"
-                >
-                  <X size={18} />
-                </button>
+        <div className="min-w-0 flex-1">
+          {error ? (
+            <ErrorState message={error} onRetry={retry} />
+          ) : isLoading ? (
+            <LoadingState />
+          ) : data && data.items.length > 0 ? (
+            <>
+              <ResultsGrid items={data.items} />
+              <div className="mt-8">
+                <Pagination
+                  page={data.page}
+                  totalPages={data.totalPages}
+                  onPageChange={setPage}
+                />
               </div>
-              <Filters allCategories={allCategories} selected={categories} onChange={setCategories} />
-              <button
-                onClick={() => setIsFilterDrawerOpen(false)}
-                className="mt-auto rounded-md bg-accent px-3.5 py-2 text-sm font-medium text-white hover:bg-accent-hover"
-              >
-                Show results
-              </button>
-            </div>
-          </div>
-        )}
-
-        <section className="flex min-w-0 flex-col gap-6">
-          {isLoading && <LoadingState />}
-
-          {!isLoading && error && <ErrorState message={error} onRetry={retry} />}
-
-          {!isLoading && !error && data && data.items.length === 0 && (
+            </>
+          ) : (
             <EmptyState
-              query={q}
+              hasQuery={Boolean(q)}
               hasActiveFilters={hasActiveFilters}
               onClearFilters={() => {
                 setTypes([]);
@@ -135,15 +103,35 @@ export function SearchPageContent() {
               }}
             />
           )}
-
-          {!isLoading && !error && data && data.items.length > 0 && (
-            <>
-              <ResultsGrid items={data.items} />
-              <Pagination page={page} totalPages={data.totalPages} onChange={setPage} />
-            </>
-          )}
-        </section>
+        </div>
       </div>
+
+      {isFilterDrawerOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <button
+            aria-label="Close filters"
+            onClick={() => setIsFilterDrawerOpen(false)}
+            className="absolute inset-0 bg-black/50"
+          />
+          <div className="absolute inset-y-0 right-0 w-80 max-w-[85vw] overflow-y-auto bg-surface p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-sm font-medium text-text-primary">Filters</h2>
+              <button
+                onClick={() => setIsFilterDrawerOpen(false)}
+                aria-label="Close filters"
+                className="rounded-full p-1 text-text-tertiary hover:text-text-primary"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <Filters
+              allCategories={allCategories}
+              selected={categories}
+              onChange={setCategories}
+            />
+          </div>
+        </div>
+      )}
       </main>
     </>
   );

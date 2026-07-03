@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Wrench, Building2, BrainCircuit, Newspaper, Layers } from "lucide-react";
-import { SearchBar } from "@/components/search/SearchBar";
+import { HeroSearchTrigger } from "@/components/search/HeroSearchTrigger";
 
 const CATEGORY_SHORTCUTS = [
   { icon: Wrench, label: "AI Tools", type: "tool" },
@@ -13,14 +15,6 @@ const CATEGORY_SHORTCUTS = [
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl items-center px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="text-sm font-semibold tracking-tight text-text-primary">
-            The&nbsp;AI&nbsp;Signal
-          </Link>
-        </div>
-      </header>
-
       <section className="hero-glow">
         <div className="mx-auto max-w-3xl px-4 pb-16 pt-20 text-center sm:px-6 lg:px-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-text-secondary">
@@ -40,7 +34,7 @@ export default function Home() {
           </p>
 
           <div className="mx-auto mt-8 max-w-xl">
-            <SearchBar autoFocus />
+            <HeroSearchTrigger />
           </div>
 
           <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
