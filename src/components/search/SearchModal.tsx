@@ -14,12 +14,6 @@ interface SearchModalProps {
   onClose: () => void;
 }
 
-/**
- * Full-screen command-palette style search overlay, modeled on
- * theresanaiforthat.com's ⌘K search: a centered panel with a search field,
- * quick entity-type filter chips, recent searches (with Clear), popular
- * searches, and live suggestions — all reachable from anywhere via ⌘K.
- */
 export function SearchModal({ open, onClose }: SearchModalProps) {
   const router = useRouter();
   const [value, setValue] = useState("");

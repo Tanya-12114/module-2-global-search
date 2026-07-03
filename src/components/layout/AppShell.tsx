@@ -24,7 +24,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
             The&nbsp;AI&nbsp;Signal
           </Link>
 
-          {/* TAAFT-style search trigger pill — opens the ⌘K overlay */}
+          {/* TAAFT-style search trigger pill — opens the ctrl+K overlay */}
           <button
             onClick={open}
             className="flex w-full max-w-xs items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-text-tertiary transition-colors hover:border-border-hover hover:text-text-secondary sm:max-w-sm"
@@ -32,7 +32,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
             <Search size={15} className="shrink-0" />
             <span className="flex-1 truncate text-left">Search</span>
             <kbd className="shrink-0 rounded border border-border bg-surface-hover px-1.5 py-0.5 text-[11px] text-text-tertiary">
-              ⌘K
+              Ctrl+K
             </kbd>
           </button>
         </div>
