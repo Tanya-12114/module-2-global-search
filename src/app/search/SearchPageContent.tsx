@@ -88,13 +88,13 @@ export function SearchPageContent() {
                 <Pagination
                   page={data.page}
                   totalPages={data.totalPages}
-                  onPageChange={setPage}
+                  onChange={setPage}
                 />
               </div>
             </>
           ) : (
             <EmptyState
-              hasQuery={Boolean(q)}
+              query={q}
               hasActiveFilters={hasActiveFilters}
               onClearFilters={() => {
                 setTypes([]);
