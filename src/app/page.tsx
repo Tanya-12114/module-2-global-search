@@ -47,7 +47,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <section className="hero-glow">
-        <div className="mx-auto max-w-3xl px-4 pb-16 pt-20 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl px-4 pb-16 pt-20 text-center sm:px-6 lg:px-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-text-secondary">
             <span
               className="h-1.5 w-1.5 rounded-full"
@@ -77,7 +77,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 px-1">
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5 px-1">
             {CATEGORY_SHORTCUTS.map(({ icon: Icon, label, type }) => (
               <Link
                 key={type}
