@@ -14,7 +14,7 @@ export function HeroSearchTrigger() {
       <Search size={18} className="shrink-0" />
       <span className="flex-1">Search tools, companies, models, news...</span>
       <kbd className="shrink-0 rounded border border-border bg-surface-hover px-1.5 py-0.5 text-[11px] text-text-tertiary">
-        Ctrl+K
+        ⌘K
       </kbd>
     </button>
   );
