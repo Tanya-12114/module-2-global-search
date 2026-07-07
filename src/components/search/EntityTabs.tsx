@@ -109,7 +109,7 @@ function CountBadge({ children, active }: { children: number; active: boolean })
   return (
     <span
       className={`ml-1.5 rounded-full px-1.5 py-0.5 text-xs font-medium tabular-nums ${
-        active ? "bg-accent/25 text-accent-hover" : "bg-white/10 text-text-secondary"
+        active ? "bg-accent/15 text-accent" : "bg-surface-active text-text-secondary"
       }`}
     >
       {children.toLocaleString()}

@@ -34,15 +34,15 @@ export const ENTITY_META: Record<
     plural: "Tools",
     icon: Wrench,
     basePath: "/tools",
-    tint: "bg-accent-soft text-accent-hover",
-    solidColor: "#5E6AD2",
+    tint: "bg-accent-soft text-accent",
+    solidColor: "#FF5C39",
   },
   company: {
     label: "Company",
     plural: "Companies",
     icon: Building2,
     basePath: "/companies",
-    tint: "bg-sky-500/10 text-sky-300",
+    tint: "bg-sky-500/10 text-sky-600",
     solidColor: "#0EA5E9",
   },
   model: {
@@ -50,7 +50,7 @@ export const ENTITY_META: Record<
     plural: "Models",
     icon: BrainCircuit,
     basePath: "/models",
-    tint: "bg-violet-500/10 text-violet-300",
+    tint: "bg-violet-500/10 text-violet-600",
     solidColor: "#8B5CF6",
   },
   news: {
@@ -58,7 +58,7 @@ export const ENTITY_META: Record<
     plural: "News",
     icon: Newspaper,
     basePath: "/news",
-    tint: "bg-amber-500/10 text-amber-300",
+    tint: "bg-amber-500/10 text-amber-600",
     solidColor: "#D97706",
   },
   video: {
@@ -66,7 +66,7 @@ export const ENTITY_META: Record<
     plural: "Videos",
     icon: Video,
     basePath: "/videos",
-    tint: "bg-pink-500/10 text-pink-300",
+    tint: "bg-pink-500/10 text-pink-600",
     solidColor: "#DB2777",
   },
   repository: {
@@ -74,7 +74,7 @@ export const ENTITY_META: Record<
     plural: "Repositories",
     icon: GitBranch,
     basePath: "/repositories",
-    tint: "bg-emerald-500/10 text-emerald-300",
+    tint: "bg-emerald-500/10 text-emerald-600",
     solidColor: "#059669",
   },
   collection: {
@@ -82,7 +82,7 @@ export const ENTITY_META: Record<
     plural: "Collections",
     icon: Layers,
     basePath: "/collections",
-    tint: "bg-lime-500/10 text-lime-300",
+    tint: "bg-lime-500/10 text-lime-600",
     solidColor: "#65A30D",
   },
   task: {
@@ -90,7 +90,7 @@ export const ENTITY_META: Record<
     plural: "Tasks",
     icon: ListChecks,
     basePath: "/tasks",
-    tint: "bg-orange-500/10 text-orange-300",
+    tint: "bg-orange-500/10 text-orange-600",
     solidColor: "#EA580C",
   },
   country: {
@@ -98,7 +98,7 @@ export const ENTITY_META: Record<
     plural: "Countries",
     icon: Globe2,
     basePath: "/countries",
-    tint: "bg-teal-500/10 text-teal-300",
+    tint: "bg-teal-500/10 text-teal-600",
     solidColor: "#0D9488",
   },
   fundraise: {
@@ -106,7 +106,7 @@ export const ENTITY_META: Record<
     plural: "Fundraises",
     icon: Rocket,
     basePath: "/fundraises",
-    tint: "bg-rose-500/10 text-rose-300",
+    tint: "bg-rose-500/10 text-rose-600",
     solidColor: "#E11D48",
   },
   investor: {
@@ -114,7 +114,7 @@ export const ENTITY_META: Record<
     plural: "Investors",
     icon: Landmark,
     basePath: "/investors",
-    tint: "bg-yellow-500/10 text-yellow-300",
+    tint: "bg-yellow-500/10 text-yellow-600",
     solidColor: "#CA8A04",
   },
   robot: {
@@ -122,7 +122,7 @@ export const ENTITY_META: Record<
     plural: "Robots",
     icon: Bot,
     basePath: "/robots",
-    tint: "bg-cyan-500/10 text-cyan-300",
+    tint: "bg-cyan-500/10 text-cyan-600",
     solidColor: "#0891B2",
   },
   device: {
@@ -130,7 +130,7 @@ export const ENTITY_META: Record<
     plural: "Devices",
     icon: Cpu,
     basePath: "/devices",
-    tint: "bg-fuchsia-500/10 text-fuchsia-300",
+    tint: "bg-fuchsia-500/10 text-fuchsia-600",
     solidColor: "#C026D3",
   },
 };

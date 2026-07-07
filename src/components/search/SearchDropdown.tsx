@@ -27,7 +27,7 @@ export function SearchDropdown({
   const showSuggestions = query.trim().length > 0;
 
   return (
-    <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 max-h-[420px] overflow-y-auto rounded-lg border border-border bg-surface text-left shadow-2xl shadow-black/40">
+    <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 max-h-[420px] overflow-y-auto rounded-lg border border-border bg-bg text-left shadow-2xl shadow-black/10">
       {showSuggestions ? (
         <SuggestionList
           isLoading={isLoading}

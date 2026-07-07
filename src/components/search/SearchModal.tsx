@@ -90,7 +90,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
       />
 
       {/* Panel */}
-      <div className="relative z-10 flex h-fit max-h-[76vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl shadow-black/60">
+      <div className="relative z-10 flex h-fit max-h-[76vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-border bg-bg shadow-2xl shadow-black/20">
         {/* Search field row */}
         <div className="flex items-center gap-2.5 border-b border-border px-4 py-3.5">
           <Search size={18} className="shrink-0 text-text-tertiary" />
@@ -101,7 +101,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
             onKeyDown={(e) => {
               if (e.key === "Enter") submit(value, activeType);
             }}
-            placeholder="Search tools, companies, models, news..."
+            placeholder="Search"
             className="w-full bg-transparent text-base text-text-primary placeholder:text-text-tertiary outline-none"
           />
           {value && (
@@ -179,14 +179,14 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
           )}
         </div>
 
-        {/* Footer hint row, like TAAFT's "⌘K to search" affordance */}
+        {/* Footer hint row, matching TAAFT's "⌘K" affordance in the search bar */}
         <div className="flex items-center justify-between border-t border-border bg-surface-hover/40 px-4 py-2 text-xs text-text-tertiary">
-          <span>
-            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5">↵</kbd>{" "}
+          <span className="flex items-center gap-1.5">
+            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-medium">↵</kbd>
             to search
           </span>
-          <span>
-            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5">esc</kbd>{" "}
+          <span className="flex items-center gap-1.5">
+            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-medium">esc</kbd>
             to close
           </span>
         </div>

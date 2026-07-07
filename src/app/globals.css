@@ -1,37 +1,47 @@
 @import "tailwindcss";
 
 :root {
-  /* Surfaces */
-  --color-bg: #0a0a0d;
-  --color-surface: #131318;
-  --color-surface-hover: #1b1b22;
-  --color-surface-active: #212129;
+  /* Surfaces — TAAFT v2's dark, slate-navy canvas */
+  --color-bg: #2d2e3a;
+  --color-surface: #3a3b4c;
+  --color-surface-hover: #454657;
+  --color-surface-active: #4d4e61;
+  --color-input-bg: #1e1e26;
 
   /* Borders */
-  --color-border: #222326; /* Linear's near-black */
-  --color-border-hover: #2e2e37;
+  --color-border: #45465a;
+  --color-border-hover: #565770;
 
   /* Text */
-  --color-text-primary: #f2f2f5;
-  --color-text-secondary: #93939f;
-  --color-text-tertiary: #6b6b78;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b3b4c2;
+  --color-text-tertiary: #7c7d8f;
 
-  /* Accent — Linear's exact indigo palette */
-  --color-accent: #5e6ad2;
-  --color-accent-hover: #8299ff;
-  --color-accent-soft: rgba(94, 106, 210, 0.14);
+  /* Accent — TAAFT v2's signature mint-green CTA color (Sign up / Create) */
+  --color-accent: #32de84;
+  --color-accent-hover: #5ce89c;
+  --color-accent-soft: rgba(50, 222, 132, 0.14);
+  --color-accent-text: #1c1d26;
 
-  /* CRED-style bold highlight — used sparingly, flat + high contrast */
-  --color-highlight: #c9f31d;
-  --color-highlight-text: #0a0a0d;
+  /* Selected / active pill state (e.g. "Trending") */
+  --color-selected: #1867a1;
+  --color-selected-hover: #2277b3;
+
+  /* Promo banner ("Click here to join for free!") */
+  --color-banner: #c9392f;
+  --color-banner-text: #ffffff;
+
+  /* "Spotlight" badge — flat off-white pill on the dark canvas */
+  --color-highlight: #ececf1;
+  --color-highlight-text: #232430;
 
   /* Status */
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
-  --color-danger: #f87171;
+  --color-success: #32de84;
+  --color-warning: #f5a623;
+  --color-danger: #e5493a;
 
   --radius-md: 10px;
-  --radius-lg: 14px;
+  --radius-lg: 16px;
 }
 
 @theme inline {
@@ -39,6 +49,7 @@
   --color-surface: var(--color-surface);
   --color-surface-hover: var(--color-surface-hover);
   --color-surface-active: var(--color-surface-active);
+  --color-input-bg: var(--color-input-bg);
   --color-border: var(--color-border);
   --color-border-hover: var(--color-border-hover);
   --color-text-primary: var(--color-text-primary);
@@ -47,6 +58,11 @@
   --color-accent: var(--color-accent);
   --color-accent-hover: var(--color-accent-hover);
   --color-accent-soft: var(--color-accent-soft);
+  --color-accent-text: var(--color-accent-text);
+  --color-selected: var(--color-selected);
+  --color-selected-hover: var(--color-selected-hover);
+  --color-banner: var(--color-banner);
+  --color-banner-text: var(--color-banner-text);
   --color-highlight: var(--color-highlight);
   --color-highlight-text: var(--color-highlight-text);
   --color-success: var(--color-success);
@@ -121,24 +137,26 @@ body {
 .hero-glow {
   background: radial-gradient(
     600px 300px at 50% 0%,
-    rgba(94, 106, 210, 0.2),
+    rgba(50, 222, 132, 0.08),
     transparent 70%
   );
 }
 
-/* CRED / NeoPOP signature: flat fill, hard border, offset shadow — no blur, no gradient */
+/* TAAFT-style solid CTA: flat mint-green fill, dark text, soft lift on hover */
 .btn-neopop {
-  background: var(--color-highlight);
-  color: var(--color-highlight-text);
-  border: 1.5px solid var(--color-highlight-text);
-  box-shadow: 3px 3px 0 var(--color-highlight-text);
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  border: 1.5px solid var(--color-accent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
 }
 .btn-neopop:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--color-highlight-text);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(50, 222, 132, 0.25);
 }
 .btn-neopop:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--color-highlight-text);
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }

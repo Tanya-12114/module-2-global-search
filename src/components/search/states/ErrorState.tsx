@@ -10,7 +10,7 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry: () 
       </div>
       <button
         onClick={onRetry}
-        className="mt-1 rounded-md bg-accent px-3.5 py-1.5 text-sm text-white hover:bg-accent-hover"
+        className="mt-1 rounded-md bg-accent px-3.5 py-1.5 text-sm font-medium text-accent-text hover:bg-accent-hover"
       >
         Try again
       </button>

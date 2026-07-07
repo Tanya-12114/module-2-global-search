@@ -97,10 +97,10 @@ interface ResultsTableProps {
 
 export function ResultsTable({ items, startRank }: ResultsTableProps) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-border bg-surface">
+    <div className="overflow-x-auto rounded-lg border border-border bg-bg shadow-sm">
       <table className="w-full min-w-[900px] table-fixed border-collapse text-sm">
         <thead>
-          <tr className="border-b border-border text-left text-xs font-medium uppercase tracking-wide text-text-tertiary">
+          <tr className="border-b border-border bg-surface text-left text-xs font-medium uppercase tracking-wide text-text-tertiary">
             <th className="w-[4%] px-4 py-3">#</th>
             <th className="w-[38%] px-2 py-3">Name</th>
             <th className="w-[13%] px-3 py-3">Category</th>
@@ -129,7 +129,7 @@ export function ResultsTable({ items, startRank }: ResultsTableProps) {
                     <EntityLogo entity={entity} />
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <h3 className="truncate text-sm font-medium text-text-primary group-hover:text-white">
+                        <h3 className="truncate text-sm font-medium text-text-primary group-hover:text-accent">
                           {entity.title}
                         </h3>
                         <span className="shrink-0 text-[11px] uppercase tracking-wide text-text-tertiary/70">

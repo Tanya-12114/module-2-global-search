@@ -84,7 +84,7 @@ export function ResultCard({ entity }: { entity: SearchEntity }) {
       <EntityLogo entity={entity} />
 
       <div className="min-w-[180px] flex-1">
-        <h3 className="truncate text-sm font-medium text-text-primary group-hover:text-white">
+        <h3 className="truncate text-sm font-medium text-text-primary group-hover:text-accent">
           {entity.title}
         </h3>
         <p className="mt-0.5 truncate text-xs text-text-secondary">{entity.description}</p>
