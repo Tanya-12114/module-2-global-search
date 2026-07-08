@@ -69,13 +69,13 @@ export function SearchHero({ q, onSubmitQuery }: SearchHeroProps) {
           </button>
         </div>
 
-        <p className="mt-4 flex items-center justify-center gap-1.5 text-sm text-text-secondary">
-          The front page of AI. Used by 90M+ humans.
+        <div className="mt-4 flex flex-col items-center justify-center gap-1.5 text-sm text-text-secondary sm:flex-row">
+          <p>The front page of AI. Used by 90M+ humans.</p>
           <span className="inline-flex items-center gap-1 text-text-tertiary">
             <Flame size={13} className="text-accent" />
             79,552 searches today
           </span>
-        </p>
+        </div>
 
         {/* Quick task shortcuts */}
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
