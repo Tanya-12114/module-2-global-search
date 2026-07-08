@@ -22,11 +22,8 @@ export function SearchHero({ q, onSubmitQuery }: SearchHeroProps) {
   return (
     <section className="hero-glow border-b border-border">
       <div className="mx-auto max-w-4xl px-4 pb-10 pt-12 text-center sm:px-6 lg:px-8">
-        <p className="text-xs text-text-tertiary">taaft-clone.dev/{q ? encodeURIComponent(q) : "any-keyword"}</p>
-
         <h1 className="brand-wordmark mt-2 text-4xl text-text-primary sm:text-5xl">
           The&nbsp;AI&nbsp;Signal
-          <sup className="ml-1 align-super text-xs font-black text-highlight">V2</sup>
         </h1>
 
         {/* Spotlight strip — one hand-picked featured tool, TAAFT's signature module */}
