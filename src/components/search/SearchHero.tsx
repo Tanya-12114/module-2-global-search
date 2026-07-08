@@ -69,9 +69,9 @@ export function SearchHero({ q, onSubmitQuery }: SearchHeroProps) {
           </button>
         </div>
 
-        <div className="mt-4 flex flex-col items-center justify-center gap-1.5 text-sm text-text-secondary sm:flex-row">
+        <div className="mt-4 flex flex-col items-center justify-center gap-3 text-sm text-text-secondary sm:flex-row sm:gap-2.5">
           <p>The front page of AI. Used by 90M+ humans.</p>
-          <span className="inline-flex items-center gap-1 text-text-tertiary">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-active px-3 py-1 text-text-tertiary">
             <Flame size={13} className="text-accent" />
             79,552 searches today
           </span>
