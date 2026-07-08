@@ -5,9 +5,8 @@ import {
   SearchEntity,
   SearchView,
   SortOption,
-  TimeRange,
 } from "@/types/entities";
-import { MOCK_ENTITIES, POPULAR_SEARCH_TERMS, PRICING_OPTIONS } from "./mockData";
+import { MOCK_ENTITIES, POPULAR_SEARCH_TERMS } from "./mockData";
 
 // ---------------------------------------------------------------------------
 // Swap-in point for the real backend.
@@ -70,8 +69,6 @@ export interface SearchQueryParams {
   sort: SortOption;
   /** "trending" and "leaderboard" rank by popularity; "forYou" uses `sort`. */
   view?: SearchView;
-  /** Date window applied only when view is "trending" or "leaderboard". */
-  range?: TimeRange;
   page: number;
 }
 
@@ -151,53 +148,6 @@ export async function getSearchResults(
     pageSize: PAGE_SIZE,
     totalPages,
   });
-}
-
-export function getAllCategories(): string[] {
-  return Array.from(new Set(MOCK_ENTITIES.map((e) => e.category))).sort();
-}
-
-export function getAllPricingOptions(): string[] {
-  return PRICING_OPTIONS;
-}
-
-export interface CountQueryParams {
-  q: string;
-  categories: string[];
-  pricing?: string[];
-}
-
-/**
- * Per-entity-type result counts for the current query/filters, independent
- * of which type tab is selected — this is what powers the numbers next to
- * each tab (e.g. "Tools 50,402"), matching how faceted search counts work.
- * Real equivalent: GET /api/search/counts?q=&categories=&pricing=
- */
-export async function getEntityTypeCounts(
-  params: CountQueryParams
-): Promise<Partial<Record<EntityType, number>>> {
-  maybeFail();
-  const { q, categories, pricing = [] } = params;
-  const query = q.trim().toLowerCase();
-
-  const counts: Partial<Record<EntityType, number>> = {};
-  for (const e of MOCK_ENTITIES) {
-    const matchesQuery =
-      !query ||
-      e.title.toLowerCase().includes(query) ||
-      e.description.toLowerCase().includes(query) ||
-      e.tags.some((t) => t.toLowerCase().includes(query));
-    const matchesCategory =
-      categories.length === 0 || categories.includes(e.category);
-    const matchesPricing =
-      pricing.length === 0 ||
-      (typeof e.meta.pricing === "string" && pricing.includes(e.meta.pricing));
-    if (matchesQuery && matchesCategory && matchesPricing) {
-      counts[e.type] = (counts[e.type] ?? 0) + 1;
-    }
-  }
-
-  return delay(counts, 150);
 }
 
 /**

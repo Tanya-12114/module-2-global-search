@@ -32,26 +32,6 @@ export type SortOption = "relevance" | "newest" | "popular" | "az";
 /** Primary result view, mirroring TAAFT's "For You / Trending / Leaderboard" tabs. */
 export type SearchView = "forYou" | "trending" | "leaderboard";
 
-/** Time window applied to the Trending and Leaderboard views. */
-export type TimeRange = "today" | "week" | "month";
-
-export interface SearchFilters {
-  types: EntityType[];
-  categories: string[];
-  pricing: string[];
-}
-
-export interface SearchParamsState {
-  q: string;
-  types: EntityType[];
-  categories: string[];
-  pricing: string[];
-  sort: SortOption;
-  view: SearchView;
-  range: TimeRange;
-  page: number;
-}
-
 export interface PaginatedResult<T> {
   items: T[];
   total: number;
