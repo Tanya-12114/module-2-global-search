@@ -9,13 +9,11 @@ import { SearchModalProvider, useSearchModal } from "@/context/SearchModalContex
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Search", href: "/search" },
-  { label: "Deals", href: "/search?view=deals" },
-  { label: "Leaderboard", href: "/search?view=leaderboard" },
-  { label: "Tasks", href: "/search?types=task" },
-  { label: "Mini tools", href: "/search?types=tool&size=mini" },
-  { label: "Characters", href: "/search?types=character" },
-  { label: "Map", href: "/search?view=map" },
-  { label: "Prompts", href: "/search?types=prompt" },
+  { label: "Trending", href: "/search/trending" },
+  { label: "Leaderboard", href: "/search/rankings" },
+  { label: "Collections", href: "/search/collections" },
+  { label: "News", href: "/search/results?types=news" },
+  { label: "Companies", href: "/search/results?types=company" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -33,45 +31,25 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {/* Top utility bar — mirrors TAAFT's thin secondary row (auth + create-tool CTA) */}
-      <div className="hidden border-b border-border bg-surface sm:block">
-        <div className="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-1.5 text-xs text-text-secondary sm:px-6 lg:px-8">
-          <Link href="#" className="hover:text-text-primary">
-            Advertise
-          </Link>
-          <Link href="#" className="hover:text-text-primary">
-            Newsletter
-          </Link>
-          <Link href="#" className="hover:text-text-primary">
-            Merchandise
-          </Link>
-          <Link href="#" className="hover:text-text-primary">
-            Contact us
-          </Link>
-          <Link href="#" className="hover:text-text-primary">
-            Log in
-          </Link>
-          <Link
-            href="#"
-            className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-text hover:bg-accent-hover"
-          >
-            Sign up
-          </Link>
-        </div>
+      {/* Red banner — TAAFT's persistent "join for free" strip (static, no motion) */}
+      <div className="bg-highlight py-1.5 text-center">
+        <span className="px-6 text-xs font-semibold tracking-wide text-white sm:text-sm">
+          Click here to join for free!
+        </span>
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          {showBack && (
-            <Link
-              href="/"
-              aria-label="Back to home"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-hover hover:bg-surface-hover hover:text-text-primary"
-            >
-              <ArrowLeft size={17} />
-            </Link>
-          )}
+      <header className="sticky top-0 z-40 border-b border-border bg-bg/90 backdrop-blur relative">
+        {showBack && (
+          <Link
+            href="/"
+            aria-label="Back to home"
+            className="absolute left-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-hover hover:bg-surface-hover hover:text-text-primary"
+          >
+            <ArrowLeft size={17} />
+          </Link>
+        )}
 
+        <div className="relative mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link href="/" className="shrink-0 text-sm font-semibold tracking-tight text-text-primary">
             The&nbsp;AI&nbsp;Signal
           </Link>
@@ -92,7 +70,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
           {/* TAAFT-style search trigger pill — opens the Ctrl+K overlay */}
           <button
             onClick={open}
-            className="ml-auto flex w-full max-w-xs items-center gap-2 rounded-lg border border-border bg-input-bg px-3 py-1.5 text-sm text-text-tertiary transition-colors hover:border-border-hover hover:text-text-secondary sm:max-w-sm"
+            className="ml-auto flex w-full max-w-xs items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-text-tertiary transition-colors hover:border-border-hover hover:text-text-secondary sm:max-w-sm"
           >
             <Search size={15} className="shrink-0" />
             <span className="flex-1 truncate text-left">Search</span>
@@ -103,9 +81,9 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
           <Link
             href="#"
-            className="hidden shrink-0 rounded-full bg-accent px-3.5 py-1.5 text-sm font-semibold text-accent-text transition-colors hover:bg-accent-hover sm:block"
+            className="hidden shrink-0 rounded-full bg-accent px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover sm:block"
           >
-            Create tool
+            Sign up
           </Link>
         </div>
       </header>

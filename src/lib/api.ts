@@ -75,20 +75,13 @@ export interface SearchQueryParams {
   page: number;
 }
 
-const RANGE_TO_DAYS: Record<TimeRange, number> = {
-  today: 1,
-  week: 7,
-  month: 30,
-};
-
 export async function getSearchResults(
   params: SearchQueryParams
 ): Promise<PaginatedResult<SearchEntity>> {
   maybeFail();
-  const { q, types, categories, pricing = [], sort, view = "forYou", range = "week", page } = params;
+  const { q, types, categories, pricing = [], sort, view = "forYou", page } = params;
   const query = q.trim().toLowerCase();
   const isRankedView = view === "trending" || view === "leaderboard";
-  const cutoff = Date.now() - RANGE_TO_DAYS[range] * 24 * 60 * 60 * 1000;
 
   let items = MOCK_ENTITIES.filter((e) => {
     const matchesQuery =
@@ -102,13 +95,25 @@ export async function getSearchResults(
     const matchesPricing =
       pricing.length === 0 ||
       (typeof e.meta.pricing === "string" && pricing.includes(e.meta.pricing));
-    // Trending is scoped to the selected time window; Leaderboard is all-time.
-    const matchesRange = view !== "trending" || new Date(e.createdAt).getTime() >= cutoff;
-    return matchesQuery && matchesType && matchesCategory && matchesPricing && matchesRange;
+    return matchesQuery && matchesType && matchesCategory && matchesPricing;
   });
 
   if (isRankedView) {
-    items = items.sort((a, b) => b.popularityScore - a.popularityScore);
+    if (view === "trending") {
+      // Trending blends popularity with recency (newer + popular ranks
+      // highest) rather than hard-cutting off anything past a date window —
+      // with a mock dataset this size, a strict "last 7 days" filter would
+      // leave the page almost empty. Leaderboard, below, stays pure all-time
+      // popularity so the two views still read differently.
+      const now = Date.now();
+      const trendScore = (e: SearchEntity) => {
+        const ageDays = (now - new Date(e.createdAt).getTime()) / (24 * 60 * 60 * 1000);
+        return e.popularityScore * (1 / (1 + ageDays / 60));
+      };
+      items = items.sort((a, b) => trendScore(b) - trendScore(a));
+    } else {
+      items = items.sort((a, b) => b.popularityScore - a.popularityScore);
+    }
   } else {
     switch (sort) {
       case "newest":

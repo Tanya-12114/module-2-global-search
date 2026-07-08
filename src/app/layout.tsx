@@ -8,13 +8,13 @@ export const metadata: Metadata = {
   description: "Search tools, companies, models, news, videos and repositories.",
 };
 
-// Explicitly dark-only, matching TAAFT's real slate-navy theme. Without this,
-// some browsers/OSes (Android Chrome's "force dark", Samsung Internet, etc.)
-// will auto-repaint the page with a heuristic palette instead of the colors
-// we actually intend.
+// Explicitly light-only. Without this, some browsers/OSes (Android Chrome's
+// "force dark", Samsung Internet, etc.) will auto-repaint the page with a
+// heuristic dark palette — which is what produces garbled colors and
+// low-contrast text, since it's guessing at colors we never intended.
 export const viewport: Viewport = {
-  colorScheme: "dark",
-  themeColor: "#2d2e3a",
+  colorScheme: "light",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({

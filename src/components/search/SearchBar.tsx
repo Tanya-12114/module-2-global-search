@@ -63,7 +63,7 @@ export function SearchBar({ initialValue = "", autoFocus, onSubmit }: SearchBarP
 
   return (
     <div ref={containerRef} className="relative w-full text-left">
-      <div className="flex items-center gap-2.5 rounded-lg border border-border bg-input-bg px-3.5 py-2.5 shadow-sm transition-colors focus-within:border-accent">
+      <div className="flex items-center gap-2.5 rounded-lg border border-border bg-bg px-3.5 py-2.5 shadow-sm transition-colors focus-within:border-accent">
 
         <Search size={18} className="shrink-0 text-text-tertiary" />
         <input
@@ -78,7 +78,7 @@ export function SearchBar({ initialValue = "", autoFocus, onSubmit }: SearchBarP
             if (e.key === "Enter") submit(value);
             if (e.key === "Escape") setIsOpen(false);
           }}
-          placeholder="Search"
+          placeholder="Search tools, companies, models, news..."
           className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-tertiary outline-none"
         />
         {value && (

@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { SearchPageContent } from "@/app/search/SearchPageContent";
 import { LoadingState } from "@/components/search/states/LoadingState";
+import { ResultsPageContent } from "./ResultsPageContent";
 
-export default function Home() {
+export default function ResultsPage() {
   return (
     <Suspense
       fallback={
@@ -11,7 +11,7 @@ export default function Home() {
         </main>
       }
     >
-      <SearchPageContent />
+      <ResultsPageContent />
     </Suspense>
   );
 }

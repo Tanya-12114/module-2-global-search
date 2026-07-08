@@ -71,7 +71,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
     if (trimmed) params.set("q", trimmed);
     if (type) params.set("types", type);
     onClose();
-    router.push(`/search${params.toString() ? `?${params.toString()}` : ""}`);
+    router.push(`/search/results${params.toString() ? `?${params.toString()}` : ""}`);
   }
 
   const filteredSuggestions = activeType
@@ -101,7 +101,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
             onKeyDown={(e) => {
               if (e.key === "Enter") submit(value, activeType);
             }}
-            placeholder="Search"
+            placeholder="Search tools, companies, models, news..."
             className="w-full bg-transparent text-base text-text-primary placeholder:text-text-tertiary outline-none"
           />
           {value && (
@@ -179,14 +179,14 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
           )}
         </div>
 
-        {/* Footer hint row, matching TAAFT's "⌘K" affordance in the search bar */}
+        {/* Footer hint row, like TAAFT's "⌘K to search" affordance */}
         <div className="flex items-center justify-between border-t border-border bg-surface-hover/40 px-4 py-2 text-xs text-text-tertiary">
-          <span className="flex items-center gap-1.5">
-            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-medium">↵</kbd>
+          <span>
+            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5">↵</kbd>{" "}
             to search
           </span>
-          <span className="flex items-center gap-1.5">
-            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5 font-medium">esc</kbd>
+          <span>
+            <kbd className="rounded border border-border bg-surface px-1.5 py-0.5">esc</kbd>{" "}
             to close
           </span>
         </div>
@@ -252,7 +252,7 @@ function TermRow({
 }) {
   return (
     <Link
-      href={`/search?q=${encodeURIComponent(term)}`}
+      href={`/search/results?q=${encodeURIComponent(term)}`}
       onClick={() => onSelectTerm(term)}
       className="flex items-center rounded-md px-2.5 py-2 text-sm text-text-primary hover:bg-surface-hover"
     >
@@ -303,7 +303,7 @@ function SuggestionResults({
         return (
           <Link
             key={s.id}
-            href={`/search?q=${encodeURIComponent(s.title)}`}
+            href={`/search/results?q=${encodeURIComponent(s.title)}`}
             onClick={() => onSelectTerm(s.title)}
             className="flex items-center gap-3 rounded-md px-2.5 py-2 text-sm hover:bg-surface-hover"
           >

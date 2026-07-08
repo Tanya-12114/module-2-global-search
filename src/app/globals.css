@@ -1,44 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  /* Surfaces — TAAFT v2's dark, slate-navy canvas */
-  --color-bg: #2d2e3a;
-  --color-surface: #3a3b4c;
-  --color-surface-hover: #454657;
-  --color-surface-active: #4d4e61;
-  --color-input-bg: #1e1e26;
+  /* Surfaces — TAAFT's actual near-black canvas */
+  --color-bg: #0b0b0f;
+  --color-surface: #151519;
+  --color-surface-hover: #1d1d23;
+  --color-surface-active: #26262e;
 
   /* Borders */
-  --color-border: #45465a;
-  --color-border-hover: #565770;
+  --color-border: #26262e;
+  --color-border-hover: #34343d;
 
   /* Text */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #b3b4c2;
-  --color-text-tertiary: #7c7d8f;
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #9a9aa5;
+  --color-text-tertiary: #6b6b76;
 
-  /* Accent — TAAFT v2's signature mint-green CTA color (Sign up / Create) */
-  --color-accent: #32de84;
-  --color-accent-hover: #5ce89c;
-  --color-accent-soft: rgba(50, 222, 132, 0.14);
-  --color-accent-text: #1c1d26;
+  /* Accent — the blue used for active tabs / primary actions across the site */
+  --color-accent: #3b82f6;
+  --color-accent-hover: #60a5fa;
+  --color-accent-soft: rgba(59, 130, 246, 0.16);
 
-  /* Selected / active pill state (e.g. "Trending") */
-  --color-selected: #1867a1;
-  --color-selected-hover: #2277b3;
-
-  /* Promo banner ("Click here to join for free!") */
-  --color-banner: #c9392f;
-  --color-banner-text: #ffffff;
-
-  /* "Spotlight" badge — flat off-white pill on the dark canvas */
-  --color-highlight: #ececf1;
-  --color-highlight-text: #232430;
+  /* Brand red — the "join for free" ticker + V2 mark */
+  --color-highlight: #e6273f;
+  --color-highlight-text: #ffffff;
 
   /* Status */
-  --color-success: #32de84;
-  --color-warning: #f5a623;
-  --color-danger: #e5493a;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
 
   --radius-md: 10px;
   --radius-lg: 16px;
@@ -49,7 +39,6 @@
   --color-surface: var(--color-surface);
   --color-surface-hover: var(--color-surface-hover);
   --color-surface-active: var(--color-surface-active);
-  --color-input-bg: var(--color-input-bg);
   --color-border: var(--color-border);
   --color-border-hover: var(--color-border-hover);
   --color-text-primary: var(--color-text-primary);
@@ -58,11 +47,6 @@
   --color-accent: var(--color-accent);
   --color-accent-hover: var(--color-accent-hover);
   --color-accent-soft: var(--color-accent-soft);
-  --color-accent-text: var(--color-accent-text);
-  --color-selected: var(--color-selected);
-  --color-selected-hover: var(--color-selected-hover);
-  --color-banner: var(--color-banner);
-  --color-banner-text: var(--color-banner-text);
   --color-highlight: var(--color-highlight);
   --color-highlight-text: var(--color-highlight-text);
   --color-success: var(--color-success);
@@ -76,6 +60,7 @@
 
 html {
   color-scheme: dark;
+  background: var(--color-bg);
 }
 
 body {
@@ -136,27 +121,36 @@ body {
 
 .hero-glow {
   background: radial-gradient(
-    600px 300px at 50% 0%,
-    rgba(50, 222, 132, 0.08),
+    700px 320px at 50% 0%,
+    rgba(59, 130, 246, 0.14),
     transparent 70%
   );
 }
 
-/* TAAFT-style solid CTA: flat mint-green fill, dark text, soft lift on hover */
+/* TAAFT's oversized blocky wordmark treatment */
+.brand-wordmark {
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 0.95;
+}
+
+/* TAAFT-style solid CTA: flat accent fill, soft lift on hover */
 .btn-neopop {
-  background: var(--color-accent);
-  color: var(--color-accent-text);
-  border: 1.5px solid var(--color-accent);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  background: var(--color-text-primary);
+  color: #0b0b0f;
+  border: 1.5px solid var(--color-text-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   transition: background-color 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
 }
 .btn-neopop:hover {
-  background: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(50, 222, 132, 0.25);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
 }
 .btn-neopop:active {
   transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
