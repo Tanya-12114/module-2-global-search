@@ -13,6 +13,7 @@ import { NewReleasesList } from "@/components/search/NewReleasesList";
 import { RankingsBoard } from "@/components/search/RankingsBoard";
 import { AgentsGrid } from "@/components/search/AgentsGrid";
 import { RequestsList } from "@/components/search/RequestsList";
+import { TasksTable } from "@/components/search/TasksTable";
 import { Pagination } from "@/components/search/Pagination";
 import { LoadingState } from "@/components/search/states/LoadingState";
 import { EmptyState } from "@/components/search/states/EmptyState";
@@ -57,6 +58,7 @@ export function SectionPageContent({ slug }: { slug: string }) {
   const isRankings = config?.layout === "rankings";
   const isAgents = config?.layout === "agents";
   const isRequests = config?.layout === "requests";
+  const isTasksTable = config?.layout === "tasksTable";
   const effectiveSort = isGallery
     ? gallerySort
     : isCollections
@@ -106,7 +108,7 @@ export function SectionPageContent({ slug }: { slug: string }) {
   return (
     <main>
       <div className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6 lg:px-8">
-        {!isCollections && !isNewReleases && !isRankings && !isAgents && !isRequests && (
+        {!isCollections && !isNewReleases && !isRankings && !isAgents && !isRequests && !isTasksTable && (
           <div className="mb-6 flex items-center gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
               <config.icon size={18} />
@@ -167,7 +169,7 @@ export function SectionPageContent({ slug }: { slug: string }) {
           </div>
         )}
 
-        {!isCollections && !isNewReleases && !isRankings && !isAgents && !isRequests && (
+        {!isCollections && !isNewReleases && !isRankings && !isAgents && !isRequests && !isTasksTable && (
           <p className="mb-4 text-sm text-text-secondary">
             {isLoading ? "Loading…" : `${data?.total ?? 0} results in ${config.label}`}
           </p>
@@ -209,6 +211,8 @@ export function SectionPageContent({ slug }: { slug: string }) {
               <AgentsGrid items={data.items} />
             ) : config.layout === "requests" ? (
               <RequestsList items={data.items} startRank={(data.page - 1) * data.pageSize + 1} />
+            ) : config.layout === "tasksTable" ? (
+              <TasksTable items={data.items} total={data.total} />
             ) : (
               <ResultsTable
                 items={data.items}

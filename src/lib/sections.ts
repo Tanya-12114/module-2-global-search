@@ -49,7 +49,7 @@ export interface SectionConfig {
    * - "gallery": TAAFT's tool-gallery card (image carousel, reviewer quote,
    *   bookmark, All/Top rated/New sub-tabs + search)
    */
-  layout?: "table" | "trending" | "gallery" | "featured" | "collections" | "characters" | "new" | "rankings" | "agents" | "requests";
+  layout?: "table" | "trending" | "gallery" | "featured" | "collections" | "characters" | "new" | "rankings" | "agents" | "requests" | "tasksTable" | "jobBoard";
 }
 
 // Every pill maps to the closest real entity type (or ranked view) — each one
@@ -64,8 +64,8 @@ export const SECTIONS: SectionConfig[] = [
   { key: "collections", label: "Collections", slug: "collections", icon: Layers, types: ["collection"], view: "forYou", sort: "relevance", layout: "collections" },
   { key: "agents", label: "Agents", slug: "agents", icon: Bot, types: ["tool"], view: "forYou", sort: "popular", layout: "agents" },
   { key: "requests", label: "Requests", slug: "requests", icon: MessageSquare, types: ["task"], view: "forYou", sort: "newest", layout: "requests" },
-  { key: "tasks", label: "Tasks", slug: "tasks", icon: ListChecks, types: ["task"], view: "forYou", sort: "relevance" },
-  { key: "findJob", label: "Find A Job", slug: "find-a-job", icon: Briefcase, types: ["company"], view: "forYou", sort: "relevance" },
+  { key: "tasks", label: "Tasks", slug: "tasks", icon: ListChecks, types: ["task"], view: "forYou", sort: "relevance", layout: "tasksTable" },
+  { key: "findJob", label: "Find A Job", slug: "find-a-job", icon: Briefcase, types: ["company"], view: "forYou", sort: "relevance", layout: "jobBoard" },
   { key: "nearMe", label: "Near me", slug: "near-me", icon: MapPin, types: ["country"], view: "forYou", sort: "relevance" },
   { key: "forum", label: "Forum", slug: "forum", icon: MessageCircle, types: ["news"], view: "forYou", sort: "newest" },
   { key: "newsletter", label: "Newsletter", slug: "newsletter", icon: Mail, types: ["news"], view: "forYou", sort: "popular" },
