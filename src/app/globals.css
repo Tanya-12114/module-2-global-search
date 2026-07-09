@@ -154,3 +154,40 @@ body {
   transform: translateY(0);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
+
+/* Dual-thumb price range slider: two overlapping <input type="range">
+   elements share a track; pointer-events are disabled on the input itself
+   and re-enabled only on the thumb so each handle drags independently. */
+.range-thumb {
+  pointer-events: none;
+}
+.range-thumb::-webkit-slider-thumb {
+  pointer-events: auto;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  border: 2px solid var(--color-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  margin-top: 0;
+}
+.range-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  border: 2px solid var(--color-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+.range-thumb::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 4px;
+}
+.range-thumb::-moz-range-track {
+  background: transparent;
+  height: 4px;
+}

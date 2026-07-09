@@ -47,13 +47,22 @@ const REPO_NAMES = [
 const COLLECTION_NAMES = [
   "Best AI Tools for Developers", "Best AI Agents 2026", "Best AI for Marketing Teams",
   "Best Free AI Tools", "Best AI Coding Assistants", "Best AI for Solo Founders",
+  "Kids Story Book Generators", "Wooden Art & Design Tools", "Branding Toolkit",
+  "AI Agents & Assistants", "Summarize Anything", "Lifestyle AI Picks",
+  "Ultimate AI Toolkit for YouTube Creators", "SEO Tools Worth Trying", "Personal Assistant & Help",
+  "Tarot & Fortune Telling AI", "Literally The Coolest AI Tools You Haven't Heard About",
+  "Assignments & Homework Help", "AI Mini Tools For You", "Best AI for Podcasters",
+  "No-Code AI Builders", "AI Tools for Real Estate", "Voice Cloning & Audio AI",
+  "Best AI for Students", "Resume & Job Hunting AI", "AI for Indie Game Devs",
+  "Meeting Notes & Transcription", "AI Video Editing Suite", "Photography & Editing AI",
+  "Startup Toolkit 2026",
 ];
 const TASK_NAMES = [
   "Summarize a document", "Generate marketing copy", "Transcribe a meeting",
   "Remove background from an image", "Write unit tests", "Translate a webpage",
   "Build a chatbot", "Clean a spreadsheet", "Generate a voiceover", "Detect anomalies in data",
 ];
-const COUNTRY_NAMES = [
+export const COUNTRY_NAMES = [
   "United States", "United Kingdom", "India", "Germany", "Singapore",
   "Canada", "France", "Japan", "Israel", "Netherlands",
 ];
@@ -68,21 +77,48 @@ const INVESTOR_NAMES = [
 ];
 const ROBOT_NAMES = [
   "Atlas-X", "Kinera One", "Helix R1", "Sentry Bot", "Orbit Mini", "Forge Arm-2",
+  "Shivali", "Lexi", "Raze", "Chutki", "Zara Khan", "Rusha", "Katherine", "Kavya",
+  "Lalita", "Aanchal", "Sneha Sharma", "Ishu", "Khushi Mehta", "Pramila Sutar",
+  "Luna", "Rashika", "Tsunade", "Sarah", "Hunter", "Supriya", "Bharti", "Thor",
+  "Isa", "Meena", "Nova Reyes", "Orion Vale", "Priya Anand", "Marcus Cole",
+  "Elena Frost", "Jasper Wren", "Talia Moon", "Dmitri Volk", "Sofia Cruz",
+  "Kenji Tanaka", "Amara Diallo", "Felix Stone", "Ines Duarte", "Ravi Malhotra",
+  "Sable Vance", "Théo Laurent", "Mira Okafor", "Casper Lind", "Yuki Sato",
+  "Delphine Roy", "Omar Haddad", "Ingrid Sol", "Zane Carter", "Freya Nyström",
+  "Camila Reyes", "Idris Bakr", "Nadia Volkov",
 ];
 const DEVICE_NAMES = [
   "PixelFrame Pin", "EchoBand Wearable", "SnapLens Glasses", "VoiceOrb Speaker",
   "PocketCompanion", "DeskMate Hub",
 ];
 
-const CATEGORIES = [
+export const TOOL_TITLES_FOR_STACKS = TOOL_NAMES;
+
+export const CATEGORIES = [
   "Writing", "Coding", "Image Generation", "Video", "Audio", "Productivity",
   "Marketing", "Research", "Data Analysis", "Customer Support",
 ];
 
-const TAG_POOL = [
+export const REVIEWER_NAMES = [
+  "My Sawsiri", "Shvetank Sharma", "Jordan Blake", "Priya Nair", "Tomás Rivera",
+  "Aiko Tanaka", "Liam O'Connell", "Fatima Al-Sayed", "Noah Kim", "Elena Petrova",
+];
+
+export const REVIEW_QUOTES = [
+  "I think it's the best one I've found on the net. It gives more accurate results than I expected, and thanks for keeping it free.",
+  "Not at all accurate for my case, honestly. The output only vaguely resembled what I asked for.",
+  "Saved me hours of manual work this week. The interface is a little rough but it gets the job done.",
+  "Solid for a free tier. I upgraded after the third project and haven't looked back since.",
+  "Does exactly what it says, no fuss. Wish the docs were a bit clearer though.",
+  "Been using this daily for a month now — reliable, fast, and the support team actually responds.",
+];
+
+export const TAG_POOL = [
   "API", "Open Source", "Free Tier", "Agents", "No Signup", "Automation",
   "Enterprise", "Self-Hosted", "MCP", "Realtime", "Multimodal", "Fine-tunable",
 ];
+
+export const MAX_PRICE = 300;
 
 export const PRICING_OPTIONS = ["Free", "Freemium", "Paid", "Free Trial"];
 
@@ -127,6 +163,13 @@ function buildEntities(): SearchEntity[] {
     description: string,
     meta: Record<string, string | number>
   ) => {
+    const pricing = typeof meta.pricing === "string" ? meta.pricing : undefined;
+    const priceAmount = pricing
+      ? pricing === "Free"
+        ? 0
+        : 5 + Math.floor(rand() * 295)
+      : undefined;
+
     entities.push({
       id: `${type}-${idCounter++}`,
       type,
@@ -135,6 +178,8 @@ function buildEntities(): SearchEntity[] {
       description,
       category: pick(CATEGORIES, rand),
       tags: pickMany(TAG_POOL, 2 + Math.floor(rand() * 3), rand),
+      country: pick(COUNTRY_NAMES, rand),
+      priceAmount,
       meta,
       popularityScore: Math.floor(rand() * 10000),
       createdAt: daysAgo(Math.floor(rand() * 400)),

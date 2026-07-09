@@ -22,6 +22,14 @@ export interface SearchEntity {
   imageUrl?: string;
   category: string;
   tags: string[];
+  /** Country the entity is based in / associated with — drives the Country filter. */
+  country: string;
+  /**
+   * Monthly price in USD, when applicable (0 for free entities, undefined
+   * for entity types with no notion of price, e.g. news, videos). Drives
+   * the Price range filter.
+   */
+  priceAmount?: number;
   meta: Record<string, string | number>;
   popularityScore: number;
   createdAt: string; // ISO date

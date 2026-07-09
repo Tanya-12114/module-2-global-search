@@ -42,19 +42,27 @@ export interface SectionConfig {
   types: EntityType[];
   view: SearchView;
   sort: SortOption;
+  /**
+   * Which row style this section renders in list view:
+   * - "table": dense data-table rows (default)
+   * - "trending": TAAFT's ranked-feed card (rank, votes, media, "#N in X")
+   * - "gallery": TAAFT's tool-gallery card (image carousel, reviewer quote,
+   *   bookmark, All/Top rated/New sub-tabs + search)
+   */
+  layout?: "table" | "trending" | "gallery" | "featured" | "collections" | "characters" | "new" | "rankings" | "agents";
 }
 
 // Every pill maps to the closest real entity type (or ranked view) — each one
 // opens its own page and always renders an actual, relevant list of results.
 export const SECTIONS: SectionConfig[] = [
-  { key: "trending", label: "Trending", slug: "trending", icon: TrendingUp, types: [], view: "trending", sort: "relevance" },
-  { key: "characters", label: "Characters", slug: "characters", icon: Users, types: ["robot"], view: "forYou", sort: "relevance" },
-  { key: "miniTools", label: "Mini tools", slug: "mini-tools", icon: Puzzle, types: ["tool"], view: "forYou", sort: "relevance" },
-  { key: "new", label: "New", slug: "new", icon: Sparkles, types: [], view: "forYou", sort: "newest" },
-  { key: "rankings", label: "Rankings", slug: "rankings", icon: Trophy, types: [], view: "leaderboard", sort: "relevance" },
-  { key: "featured", label: "Featured", slug: "featured", icon: Star, types: [], view: "forYou", sort: "popular" },
-  { key: "collections", label: "Collections", slug: "collections", icon: Layers, types: ["collection"], view: "forYou", sort: "relevance" },
-  { key: "agents", label: "Agents", slug: "agents", icon: Bot, types: ["tool"], view: "forYou", sort: "popular" },
+  { key: "trending", label: "Trending", slug: "trending", icon: TrendingUp, types: [], view: "trending", sort: "relevance", layout: "trending" },
+  { key: "characters", label: "Characters", slug: "characters", icon: Users, types: ["robot"], view: "forYou", sort: "relevance", layout: "characters" },
+  { key: "miniTools", label: "Mini tools", slug: "mini-tools", icon: Puzzle, types: ["tool"], view: "forYou", sort: "relevance", layout: "gallery" },
+  { key: "new", label: "New", slug: "new", icon: Sparkles, types: [], view: "forYou", sort: "newest", layout: "new" },
+  { key: "rankings", label: "Rankings", slug: "rankings", icon: Trophy, types: [], view: "leaderboard", sort: "relevance", layout: "rankings" },
+  { key: "featured", label: "Featured", slug: "featured", icon: Star, types: [], view: "forYou", sort: "popular", layout: "featured" },
+  { key: "collections", label: "Collections", slug: "collections", icon: Layers, types: ["collection"], view: "forYou", sort: "relevance", layout: "collections" },
+  { key: "agents", label: "Agents", slug: "agents", icon: Bot, types: ["tool"], view: "forYou", sort: "popular", layout: "agents" },
   { key: "requests", label: "Requests", slug: "requests", icon: MessageSquare, types: ["task"], view: "forYou", sort: "newest" },
   { key: "tasks", label: "Tasks", slug: "tasks", icon: ListChecks, types: ["task"], view: "forYou", sort: "relevance" },
   { key: "findJob", label: "Find A Job", slug: "find-a-job", icon: Briefcase, types: ["company"], view: "forYou", sort: "relevance" },
