@@ -14,6 +14,7 @@ import { RankingsBoard } from "@/components/search/RankingsBoard";
 import { AgentsGrid } from "@/components/search/AgentsGrid";
 import { RequestsList } from "@/components/search/RequestsList";
 import { TasksTable } from "@/components/search/TasksTable";
+import { JobBoard } from "@/components/search/JobBoard";
 import { Pagination } from "@/components/search/Pagination";
 import { LoadingState } from "@/components/search/states/LoadingState";
 import { EmptyState } from "@/components/search/states/EmptyState";
@@ -100,6 +101,16 @@ export function SectionPageContent({ slug }: { slug: string }) {
   }, [slug, page, effectiveSort, effectiveQuery, retryToken]);
 
   if (!config) return null;
+
+  if (config.layout === "jobBoard") {
+    return (
+      <main>
+        <div className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6 lg:px-8">
+          <JobBoard />
+        </div>
+      </main>
+    );
+  }
 
   function setPage(next: number) {
     router.push(`/search/${slug}?page=${next}`);
