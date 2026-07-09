@@ -49,7 +49,7 @@ export interface SectionConfig {
    * - "gallery": TAAFT's tool-gallery card (image carousel, reviewer quote,
    *   bookmark, All/Top rated/New sub-tabs + search)
    */
-  layout?: "table" | "trending" | "gallery" | "featured" | "collections" | "characters" | "new" | "rankings" | "agents" | "requests" | "tasksTable" | "jobBoard";
+  layout?: "table" | "trending" | "gallery" | "featured" | "collections" | "characters" | "new" | "rankings" | "agents" | "requests" | "tasksTable" | "jobBoard" | "newsletterBoard";
 }
 
 // Every pill maps to the closest real entity type (or ranked view) — each one
@@ -68,7 +68,7 @@ export const SECTIONS: SectionConfig[] = [
   { key: "findJob", label: "Find A Job", slug: "find-a-job", icon: Briefcase, types: ["company"], view: "forYou", sort: "relevance", layout: "jobBoard" },
   { key: "nearMe", label: "Near me", slug: "near-me", icon: MapPin, types: ["country"], view: "forYou", sort: "relevance" },
   { key: "forum", label: "Forum", slug: "forum", icon: MessageCircle, types: ["news"], view: "forYou", sort: "newest" },
-  { key: "newsletter", label: "Newsletter", slug: "newsletter", icon: Mail, types: ["news"], view: "forYou", sort: "popular" },
+  { key: "newsletter", label: "Newsletter", slug: "newsletter", icon: Mail, types: ["news"], view: "forYou", sort: "popular", layout: "newsletterBoard" },
 ];
 
 export function getSectionBySlug(slug: string): SectionConfig | undefined {
