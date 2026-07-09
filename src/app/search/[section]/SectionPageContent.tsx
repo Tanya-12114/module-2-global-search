@@ -16,6 +16,7 @@ import { RequestsList } from "@/components/search/RequestsList";
 import { TasksTable } from "@/components/search/TasksTable";
 import { JobBoard } from "@/components/search/JobBoard";
 import { NewsletterBoard } from "@/components/search/NewsletterBoard";
+import { ForumBoard } from "@/components/search/ForumBoard";
 import { Pagination } from "@/components/search/Pagination";
 import { LoadingState } from "@/components/search/states/LoadingState";
 import { EmptyState } from "@/components/search/states/EmptyState";
@@ -118,6 +119,16 @@ export function SectionPageContent({ slug }: { slug: string }) {
       <main>
         <div className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6 lg:px-8">
           <NewsletterBoard />
+        </div>
+      </main>
+    );
+  }
+
+  if (config.layout === "forumBoard") {
+    return (
+      <main>
+        <div className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6 lg:px-8">
+          <ForumBoard />
         </div>
       </main>
     );
