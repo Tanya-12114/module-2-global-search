@@ -1,0 +1,168 @@
+// Prisma schema for the Global Search backend.
+//
+// Two families of models live here:
+//   1. `Entity` — a generic, polymorphic table backing the existing search
+//      module (tools, companies, tasks, news, models, robots, etc). It
+//      mirrors the shape of `SearchEntity` in src/types/entities.ts, with
+//      type-specific fields kept in `meta` (JSONB) rather than one column
+//      per entity type per field.
+//   2. Dedicated models (`Job`, `ForumCategory`, `ForumTopic`,
+//      `NewsletterPost`, `ToolRequest`) for the boards that were built on
+//      self-contained mock data (JobBoard, ForumBoard, NewsletterBoard,
+//      RequestsList) — these have real, distinct shapes that don't fit the
+//      generic Entity table well.
+//
+// Uses Prisma's driver adapters (`driverAdapters` preview feature) so the
+// generated client works on edge runtimes (Vercel Edge, Cloudflare Workers)
+// via @prisma/adapter-neon, not just Node.js.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Generic search entities (tools, companies, tasks, news, models, robots,
+// devices, videos, repositories, investors, fundraises, countries,
+// collections — see EntityType).
+// ---------------------------------------------------------------------------
+
+enum EntityType {
+  tool
+  company
+  task
+  news
+  model
+  robot
+  device
+  video
+  repository
+  investor
+  fundraise
+  country
+  collection
+}
+
+model Entity {
+  id              String     @id @default(cuid())
+  type            EntityType
+  slug            String
+  title           String
+  category        String?
+  description     String?
+  tags            String[]   @default([])
+  imageUrl        String?
+  popularityScore Int        @default(0)
+  /// Type-specific fields (e.g. toolCount for a task, headquarters for a
+  /// company). Kept schemaless since each entity type has a different shape.
+  meta            Json       @default("{}")
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@unique([type, slug])
+  @@index([type])
+  @@index([type, category])
+  @@index([popularityScore])
+}
+
+// ---------------------------------------------------------------------------
+// Job Listings board (src/components/search/JobBoard.tsx)
+// ---------------------------------------------------------------------------
+
+enum LocationType {
+  ON_SITE
+  HYBRID
+  REMOTE
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+}
+
+model Job {
+  id             String         @id @default(cuid())
+  title          String
+  company        String
+  logoText       String
+  logoColor      String
+  locationType   LocationType
+  location       String?
+  salaryMin      Int
+  salaryMax      Int
+  employmentType EmploymentType
+  createdAt      DateTime       @default(now())
+
+  @@index([locationType])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Forum board (src/components/search/ForumBoard.tsx)
+// ---------------------------------------------------------------------------
+
+model ForumCategory {
+  id     String       @id @default(cuid())
+  name   String       @unique
+  color  String
+  topics ForumTopic[]
+}
+
+model ForumTopic {
+  id         String        @id @default(cuid())
+  title      String
+  excerpt    String
+  categoryId String
+  category   ForumCategory @relation(fields: [categoryId], references: [id])
+  tags       String[]      @default([])
+  replies    Int           @default(0)
+  views      Int           @default(0)
+  pinned     Boolean       @default(false)
+  locked     Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+
+  @@index([categoryId])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Newsletter board (src/components/search/NewsletterBoard.tsx)
+// ---------------------------------------------------------------------------
+
+model NewsletterPost {
+  id          String   @id @default(cuid())
+  eyebrow     String
+  headline    String
+  excerpt     String
+  readMinutes Int
+  accent      String
+  imageSeed   String
+  featured    Boolean  @default(false)
+  publishedAt DateTime @default(now())
+
+  @@index([featured])
+  @@index([publishedAt])
+}
+
+// ---------------------------------------------------------------------------
+// AI Tool Requests board (src/components/search/RequestsList.tsx)
+// ---------------------------------------------------------------------------
+
+model ToolRequest {
+  id        String   @id @default(cuid())
+  title     String
+  category  String
+  tags      String[] @default([])
+  votes     Int      @default(0)
+  fulfilled Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([fulfilled])
+  @@index([votes])
+}

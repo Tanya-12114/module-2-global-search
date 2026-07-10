@@ -1,0 +1,10 @@
+# Local-dev secrets for `wrangler dev` (nodejs_compat exposes these as
+# process.env.*, same as a normal .env file — but Wrangler's convention is
+# .dev.vars, not .env). Copy this to .dev.vars (git-ignored).
+#
+# For running prisma commands directly (db:migrate, db:seed, db:studio),
+# also copy this to .env — Prisma's CLI reads .env, not .dev.vars.
+#
+# Get this from your Neon project dashboard → Connection Details. Must be
+# the pooled connection string with ?sslmode=require.
+DATABASE_URL="postgresql://user:password@ep-example-123456.us-east-1.aws.neon.tech/neondb?sslmode=require"
