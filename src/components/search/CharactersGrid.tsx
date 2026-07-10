@@ -65,7 +65,7 @@ export function CharactersGrid({ items }: CharactersGridProps) {
   const meta = ENTITY_META.robot;
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7">
+    <div className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
       {items.map((entity) => {
         const href = `${meta.basePath}/${entity.slug}`;
         const { comments, portrait } = deriveCharacterSignals(entity);
@@ -74,34 +74,35 @@ export function CharactersGrid({ items }: CharactersGridProps) {
           <Link
             key={entity.id}
             href={href}
-            className="group flex flex-col rounded-lg border border-border bg-surface p-3 transition-colors hover:border-border-hover"
+            className="group flex items-start gap-3.5 p-4 transition-colors hover:bg-surface-hover sm:items-center"
           >
-            <div className="flex items-start gap-2.5">
-              <Avatar entity={entity} portrait={portrait} />
-              <div className="min-w-0 pt-0.5">
+            <Avatar entity={entity} portrait={portrait} />
+
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-baseline gap-x-2">
                 <h3 className="truncate text-sm font-semibold text-text-primary group-hover:text-accent">
                   {entity.title}
                 </h3>
-                <p className="truncate text-xs text-accent-hover">{entity.category}</p>
+                <span className="truncate text-xs text-accent-hover">{entity.category}</span>
+              </div>
+
+              <p className="mt-1 line-clamp-1 text-xs leading-relaxed text-text-secondary sm:line-clamp-1">
+                {entity.description}
+              </p>
+
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {entity.tags.slice(0, 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center rounded-md bg-surface-active px-2 py-0.5 text-[11px] font-medium text-text-secondary"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
 
-            <div className="mt-2.5 flex flex-wrap gap-1.5">
-              {entity.tags.slice(0, 4).map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center rounded-md bg-surface-active px-2 py-0.5 text-[11px] font-medium text-text-secondary"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <p className="mt-2.5 line-clamp-3 flex-1 text-xs leading-relaxed text-text-secondary">
-              {entity.description}
-            </p>
-
-            <div className="mt-2.5 flex items-center gap-1 text-xs text-text-tertiary">
+            <div className="ml-2 flex shrink-0 items-center gap-1 text-xs text-text-tertiary">
               <MessageCircle size={12} />
               {formatCompact(comments)}
             </div>
