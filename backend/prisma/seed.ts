@@ -12,6 +12,7 @@
  * see the frontend README for how to cut it over. Once that happens, seed
  * Entity rows from whatever replaces that mock data, not from here.
  */
+import "dotenv/config";
 import { PrismaClient, type LocationType, type EmploymentType } from "@prisma/client";
 
 const prisma = new PrismaClient();

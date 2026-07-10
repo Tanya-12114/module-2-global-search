@@ -17,14 +17,15 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
-    "@prisma/adapter-neon": "^7.8.0",
-    "@prisma/client": "^7.8.0",
+    "@prisma/adapter-neon": "6.19.3",
+    "@prisma/client": "6.19.3",
+    "dotenv": "^17.4.2",
     "hono": "^4.12.29"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260708.0",
     "@types/node": "^20",
-    "prisma": "^7.8.0",
+    "prisma": "6.19.3",
     "tsx": "^4.23.0",
     "typescript": "^5",
     "wrangler": "^4.20.0"

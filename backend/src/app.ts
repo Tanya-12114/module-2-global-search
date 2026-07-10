@@ -14,11 +14,19 @@ import type { EntityType, EmploymentType, LocationType } from "@prisma/client";
 
 export type Bindings = {
   DATABASE_URL: string;
+  FRONTEND_ORIGIN?: string;
 };
 
 export const app = new Hono<{ Bindings: Bindings }>().basePath("/api");
 
-app.use("*", cors());
+app.use("*", (c, next) =>
+  cors({
+    // Falls back to "*" (open) if FRONTEND_ORIGIN isn't set, so local dev
+    // and first deploys still work without extra config. Set FRONTEND_ORIGIN
+    // once you know your deployed frontend's domain to lock this down.
+    origin: c.env.FRONTEND_ORIGIN || "*",
+  })(c, next)
+);
 
 app.get("/health", (c) => c.json({ ok: true }));
 
