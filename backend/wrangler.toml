@@ -1,8 +1,0 @@
-name = "global-search-api"
-main = "src/index.ts"
-compatibility_date = "2026-07-01"
-compatibility_flags = ["nodejs_compat"]
-
-# DATABASE_URL is a secret, not a var — don't put it here.
-#   Local dev:   put it in .dev.vars (git-ignored, see .dev.vars.example)
-#   Deployed:    wrangler secret put DATABASE_URL
