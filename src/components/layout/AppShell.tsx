@@ -53,12 +53,12 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
           )}
         </div>
 
-        <div className="relative mx-auto flex max-w-7xl items-center gap-4 py-3 pl-28 pr-4 sm:pl-32 sm:pr-6 lg:px-8">
+        <div className="relative mx-auto flex max-w-7xl items-center gap-4 py-3 pl-28 pr-4 sm:pr-6 lg:px-8">
           <Link href="/" className="flex shrink-0 items-center gap-2 text-sm font-semibold tracking-tight text-text-primary">
             <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-white">
               <Sparkles size={14} />
             </span>
-            <span className="hidden sm:inline">The&nbsp;AI&nbsp;Signal</span>
+            <span className="hidden lg:inline">The&nbsp;AI&nbsp;Signal</span>
           </Link>
 
           {/* Free mode toggle — cosmetic, matches the reference site's mode switch */}
@@ -98,25 +98,25 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
           {/* Search trigger pill — opens the shared Ctrl+K global search modal */}
           <button
             onClick={open}
-            className="ml-auto flex w-full max-w-[220px] items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-sm text-text-tertiary transition-colors hover:border-border-hover hover:text-text-secondary sm:max-w-xs"
+            className="ml-auto flex w-full max-w-[220px] items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-sm text-text-tertiary transition-colors hover:border-border-hover hover:text-text-secondary sm:max-w-[200px] lg:max-w-xs"
           >
             <Search size={15} className="shrink-0" />
             <span className="flex-1 truncate text-left">Search</span>
-            <kbd className="hidden shrink-0 rounded border border-border bg-surface-hover px-1.5 py-0.5 text-[11px] text-text-tertiary sm:inline">
+            <kbd className="hidden shrink-0 rounded border border-border bg-surface-hover px-1.5 py-0.5 text-[11px] text-text-tertiary lg:inline">
               Ctrl+K
             </kbd>
           </button>
 
           <Link
             href="#"
-            className="hidden shrink-0 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary lg:block"
+            className="hidden shrink-0 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary sm:block"
           >
             Log in
           </Link>
 
           <Link
             href="#"
-            className="hidden shrink-0 rounded-full bg-accent px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover lg:block"
+            className="hidden shrink-0 rounded-full bg-accent px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover sm:block"
           >
             Sign up
           </Link>
