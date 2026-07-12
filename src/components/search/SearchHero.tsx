@@ -35,15 +35,15 @@ export function SearchHero({ q, onSubmitQuery, pills = "sections" }: SearchHeroP
         {/* Spotlight strip — one hand-picked featured tool, TAAFT's signature module */}
         <Link
           href="/tools/surething-io"
-          className="mx-auto mt-5 flex max-w-xl items-center justify-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm transition-colors hover:border-border-hover"
+          className="mx-auto mt-5 flex w-full max-w-xl items-center justify-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm transition-colors hover:border-border-hover"
         >
           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
             <Sparkles size={12} />
           </span>
-          <span className="rounded-full bg-bg px-2 py-0.5 text-[11px] font-medium text-text-secondary">
+          <span className="shrink-0 rounded-full bg-bg px-2 py-0.5 text-[11px] font-medium text-text-secondary">
             Spotlight
           </span>
-          <span className="truncate text-text-primary">
+          <span className="min-w-0 flex-1 truncate text-left text-text-primary">
             SureThing.io — &ldquo;OpenClaw&rdquo; for beginners
           </span>
           <span className="hidden shrink-0 rounded-full bg-bg px-2 py-0.5 text-[11px] text-text-secondary sm:inline">

@@ -109,14 +109,14 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
           <Link
             href="#"
-            className="hidden shrink-0 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary sm:block"
+            className="hidden shrink-0 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary lg:block"
           >
             Log in
           </Link>
 
           <Link
             href="#"
-            className="hidden shrink-0 rounded-full bg-accent px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover sm:block"
+            className="hidden shrink-0 rounded-full bg-accent px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover lg:block"
           >
             Sign up
           </Link>
