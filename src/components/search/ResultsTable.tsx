@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Eye, Bookmark, MessageSquare } from "lucide-react";
 import { SearchEntity } from "@/types/entities";
 import { ENTITY_META } from "@/lib/entityMeta";
 import { Badge } from "@/components/ui/Badge";
+import { EntityLogo } from "@/components/ui/EntityLogo";
 
 function metaSummary(entity: SearchEntity): string {
   switch (entity.type) {
@@ -62,33 +62,6 @@ function formatCompact(n: number): string {
   return String(n);
 }
 
-function EntityLogo({ entity }: { entity: SearchEntity }) {
-  const meta = ENTITY_META[entity.type];
-  const Icon = meta.icon;
-
-  if (entity.imageUrl) {
-    return (
-      <Image
-        src={entity.imageUrl}
-        alt=""
-        width={32}
-        height={32}
-        className="h-8 w-8 shrink-0 rounded-md object-cover"
-      />
-    );
-  }
-
-  return (
-    <div
-      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md"
-      style={{ backgroundColor: meta.solidColor }}
-      aria-hidden
-    >
-      <Icon size={15} className="text-white" strokeWidth={2} />
-    </div>
-  );
-}
-
 interface ResultsTableProps {
   items: SearchEntity[];
   /** Rank of the first row on this page, e.g. (page - 1) * pageSize + 1. */
@@ -126,7 +99,7 @@ export function ResultsTable({ items, startRank }: ResultsTableProps) {
                 </td>
                 <td className="px-2 py-3 align-top">
                   <Link href={href} className="flex items-start gap-3">
-                    <EntityLogo entity={entity} />
+                    <EntityLogo entity={entity} size={32} />
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <h3 className="truncate text-sm font-medium text-text-primary group-hover:text-accent">

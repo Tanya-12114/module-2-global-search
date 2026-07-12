@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { SearchEntity } from "@/types/entities";
 import { ENTITY_META } from "@/lib/entityMeta";
 import { Badge } from "@/components/ui/Badge";
+import { EntityLogo } from "@/components/ui/EntityLogo";
 
 function metaSummary(entity: SearchEntity): string {
   switch (entity.type) {
@@ -38,40 +38,6 @@ function metaSummary(entity: SearchEntity): string {
   }
 }
 
-/**
- * The logo slot. Prefers a real image (`entity.imageUrl`, once the backend
- * provides one). Until then, falls back to the entity type's own icon on a
- * solid, type-colored background — so the logo itself communicates "this is
- * a Repository" / "this is News" without needing a text label next to the
- * title.
- */
-function EntityLogo({ entity }: { entity: SearchEntity }) {
-  const meta = ENTITY_META[entity.type];
-  const Icon = meta.icon;
-
-  if (entity.imageUrl) {
-    return (
-      <Image
-        src={entity.imageUrl}
-        alt=""
-        width={36}
-        height={36}
-        className="h-9 w-9 shrink-0 rounded-md object-cover"
-      />
-    );
-  }
-
-  return (
-    <div
-      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md"
-      style={{ backgroundColor: meta.solidColor }}
-      aria-hidden
-    >
-      <Icon size={17} className="text-white" strokeWidth={2} />
-    </div>
-  );
-}
-
 export function ResultCard({ entity }: { entity: SearchEntity }) {
   const meta = ENTITY_META[entity.type];
   const href = `${meta.basePath}/${entity.slug}`;
@@ -81,7 +47,7 @@ export function ResultCard({ entity }: { entity: SearchEntity }) {
       href={href}
       className="group flex items-center gap-4 border-b border-border px-4 py-3.5 transition-colors last:border-b-0 hover:bg-surface-hover"
     >
-      <EntityLogo entity={entity} />
+      <EntityLogo entity={entity} size={36} />
 
       <div className="min-w-[180px] flex-1">
         <h3 className="truncate text-sm font-medium text-text-primary group-hover:text-accent">

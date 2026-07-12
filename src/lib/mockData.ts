@@ -1,4 +1,10 @@
 import { EntityType, SearchEntity } from "@/types/entities";
+import { REAL_TOOLS } from "@/lib/realTools";
+
+/** Real-brand logo for a tool's domain, via Clearbit's public logo API. */
+export function logoForDomain(domain: string): string {
+  return `https://logo.clearbit.com/${domain}?size=128`;
+}
 
 // ---------------------------------------------------------------------------
 // This file is a STAND-IN for the real backend. Every entity here has the
@@ -186,10 +192,36 @@ function buildEntities(): SearchEntity[] {
     });
   };
 
+  REAL_TOOLS.forEach((tool) => {
+    const id = `tool-${idCounter++}`;
+    entities.push({
+      id,
+      type: "tool",
+      title: tool.name,
+      slug: slugify(tool.name),
+      description: `${tool.name} helps you ${tool.task.toLowerCase()}.`,
+      imageUrl: logoForDomain(tool.domain),
+      category: tool.category,
+      tags: pickMany(TAG_POOL, 2 + Math.floor(rand() * 3), rand),
+      country: tool.country,
+      priceAmount: tool.pricing === "Free" ? 0 : 5 + Math.floor(rand() * 295),
+      meta: {
+        pricing: tool.pricing,
+        website: tool.domain,
+        task: tool.task,
+      },
+      popularityScore: Math.floor(rand() * 10000),
+      createdAt: daysAgo(Math.floor(rand() * 400)),
+    });
+  });
+
+  // A handful of smaller/legacy placeholder tools, kept so the type-icon
+  // fallback (no imageUrl) still has coverage in the demo data.
   TOOL_NAMES.forEach((name) =>
     push("tool", name, `${name} helps teams automate repetitive work using AI, with a focus on speed and simplicity.`, {
       pricing: pick(["Free", "Freemium", "Paid", "Free Trial"], rand),
       website: `${name.toLowerCase().replace(/\s+/g, "")}.ai`,
+      task: pick(TASK_NAMES, rand),
     })
   );
 

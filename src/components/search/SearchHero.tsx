@@ -10,18 +10,24 @@ import {
 } from "lucide-react";
 import { useSearchModal } from "@/context/SearchModalContext";
 import { SectionPillsNav } from "@/components/search/SectionPillsNav";
+import { EntityCountsRow } from "@/components/search/EntityCountsRow";
 
 interface SearchHeroProps {
   q: string;
   onSubmitQuery: (value: string) => void;
+  /** "entities" (Tools/Companies/Models/… counts) is used on the homepage;
+   *  "sections" (Trending/Characters/Mini tools/… the full 14-pill nav) is
+   *  used on the dedicated /search page reached via the sidebar. */
+  pills?: "entities" | "sections";
 }
 
-export function SearchHero({ q, onSubmitQuery }: SearchHeroProps) {
+export function SearchHero({ q, onSubmitQuery, pills = "sections" }: SearchHeroProps) {
   const { open } = useSearchModal();
 
   return (
     <section className="hero-glow border-b border-border">
       <div className="mx-auto max-w-4xl px-4 pb-10 pt-12 text-center sm:px-6 lg:px-8">
+        <p className="text-xs text-text-tertiary">theaisignal.com/any-keyword</p>
         <h1 className="brand-wordmark mt-2 text-4xl text-text-primary sm:text-5xl">
           The&nbsp;AI&nbsp;Signal
         </h1>
@@ -95,8 +101,12 @@ export function SearchHero({ q, onSubmitQuery }: SearchHeroProps) {
           </button>
         </div>
 
-        {/* Section pills — each one is a real link to its own full results page */}
-        <SectionPillsNav className="mx-auto mt-6 max-w-2xl justify-center" />
+        {/* Homepage shows live entity-type counts; /search shows the full 14-section nav */}
+        {pills === "entities" ? (
+          <EntityCountsRow className="mx-auto mt-6 max-w-2xl justify-center" />
+        ) : (
+          <SectionPillsNav className="mx-auto mt-6 max-w-3xl justify-center" />
+        )}
       </div>
     </section>
   );
