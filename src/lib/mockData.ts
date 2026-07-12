@@ -152,10 +152,18 @@ function pickMany<T>(arr: T[], count: number, rand: () => number): T[] {
   return shuffled.slice(0, count);
 }
 
+// Fixed anchor for all generated "createdAt" timestamps. Using a constant
+// instead of `new Date()`/`Date.now()` keeps mock-data generation fully
+// deterministic: the server (at request time) and the client (at hydration,
+// moments later) must compute byte-identical output, or React's hydration
+// will detect a mismatch and throw the tree away to re-render client-side.
+// A live wall-clock reference, called once per entity, drifts by a few
+// milliseconds between the two passes — enough to flip the sort order of
+// entities whose randomized "days ago" value ties or nearly ties.
+const MOCK_DATA_REFERENCE_NOW = new Date("2026-07-01T00:00:00.000Z").getTime();
+
 function daysAgo(n: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() - n);
-  return d.toISOString();
+  return new Date(MOCK_DATA_REFERENCE_NOW - n * 24 * 60 * 60 * 1000).toISOString();
 }
 
 function buildEntities(): SearchEntity[] {

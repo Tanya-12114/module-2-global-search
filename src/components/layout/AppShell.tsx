@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, Search, CheckSquare, Tag, Percent, ChevronDown, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Search, CheckSquare, Tag, Percent, ChevronDown, Sparkles, Menu } from "lucide-react";
 import { SearchModal } from "@/components/search/SearchModal";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { Sidebar, MobileNavDrawer } from "@/components/layout/Sidebar";
 import { SearchModalProvider, useSearchModal } from "@/context/SearchModalContext";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -19,6 +20,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
   const { isOpen, open, close } = useSearchModal();
   const pathname = usePathname();
   const showBack = pathname !== "/";
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
     <>
@@ -30,17 +32,28 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       </div>
 
       <header className="sticky top-0 z-40 border-b border-border bg-bg relative">
-        {showBack && (
-          <Link
-            href="/"
-            aria-label="Back to home"
-            className="absolute left-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-hover hover:bg-surface-hover hover:text-text-primary lg:hidden"
+        <div className="absolute left-4 top-1/2 z-10 flex -translate-y-1/2 items-center gap-2 lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen(true)}
+            aria-label="Open menu"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-hover hover:bg-surface-hover hover:text-text-primary"
           >
-            <ArrowLeft size={17} />
-          </Link>
-        )}
+            <Menu size={17} />
+          </button>
 
-        <div className="relative mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
+          {showBack && (
+            <Link
+              href="/"
+              aria-label="Back to home"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-border-hover hover:bg-surface-hover hover:text-text-primary"
+            >
+              <ArrowLeft size={17} />
+            </Link>
+          )}
+        </div>
+
+        <div className="relative mx-auto flex max-w-7xl items-center gap-4 py-3 pl-28 pr-4 sm:pl-32 sm:pr-6 lg:px-8">
           <Link href="/" className="flex shrink-0 items-center gap-2 text-sm font-semibold tracking-tight text-text-primary">
             <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-white">
               <Sparkles size={14} />
@@ -111,6 +124,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       </header>
 
       <Sidebar />
+      <MobileNavDrawer open={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
 
       <div className="lg:pl-14">{children}</div>
 
