@@ -5,7 +5,6 @@ import { useState } from "react";
 import { EntityTabs } from "@/components/search/EntityTabs";
 import { Filters } from "@/components/search/Filters";
 import { SortSelect } from "@/components/search/SortSelect";
-import { Pagination } from "@/components/search/Pagination";
 import { ResultsTable } from "@/components/search/ResultsTable";
 import { LoadingState } from "@/components/search/states/LoadingState";
 import { EmptyState } from "@/components/search/states/EmptyState";
@@ -17,8 +16,8 @@ import { CATEGORIES, COUNTRY_NAMES, MAX_PRICE, PRICING_OPTIONS, TAG_POOL } from 
  * The dedicated, full-page results view — the TAAFT-style layout: entity
  * tabs across the top (with live counts), a filter sidebar on the left
  * (category, pricing, features, country, price range — all with live
- * counts), and sort + numbered pagination on the right. Every filter is
- * driven by the URL so any combination is a shareable link.
+ * counts), and sort on the right. All matching results load at once.
+ * Every filter is driven by the URL so any combination is a shareable link.
  */
 export function ResultsPageContent() {
   const {
@@ -45,7 +44,6 @@ export function ResultsPageContent() {
     setCountries,
     setPriceRange,
     setSort,
-    setPage,
     clearFilters,
   } = useSearchResults();
 
@@ -148,17 +146,7 @@ export function ResultsPageContent() {
             ) : isLoading ? (
               <LoadingState />
             ) : data && data.items.length > 0 ? (
-              <>
-                <ResultsTable
-                  items={data.items}
-                  startRank={(data.page - 1) * data.pageSize + 1}
-                />
-                {data.totalPages > 1 && (
-                  <div className="mt-6">
-                    <Pagination page={data.page} totalPages={data.totalPages} onChange={setPage} />
-                  </div>
-                )}
-              </>
+              <ResultsTable items={data.items} startRank={1} />
             ) : (
               <EmptyState
                 query={q}

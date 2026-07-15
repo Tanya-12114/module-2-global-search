@@ -1,7 +1,6 @@
 import {
   AutocompleteSuggestion,
   EntityType,
-  PaginatedResult,
   SearchEntity,
   SearchView,
   SortOption,
@@ -20,7 +19,6 @@ import { CATEGORIES, COUNTRY_NAMES, MAX_PRICE, MOCK_ENTITIES, POPULAR_SEARCH_TER
 // ---------------------------------------------------------------------------
 
 const NETWORK_DELAY_MS = 380;
-const PAGE_SIZE = 20;
 
 function delay<T>(value: T, ms = NETWORK_DELAY_MS): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
@@ -75,7 +73,6 @@ export interface SearchQueryParams {
   sort: SortOption;
   /** "trending" and "leaderboard" rank by popularity; "forYou" uses `sort`. */
   view?: SearchView;
-  page: number;
 }
 
 function matchesCommonFilters(
@@ -121,9 +118,14 @@ function matchesCommonFilters(
   );
 }
 
+export interface SearchResults {
+  items: SearchEntity[];
+  total: number;
+}
+
 export async function getSearchResults(
   params: SearchQueryParams
-): Promise<PaginatedResult<SearchEntity>> {
+): Promise<SearchResults> {
   maybeFail();
   const {
     q,
@@ -136,7 +138,6 @@ export async function getSearchResults(
     priceMax,
     sort,
     view = "forYou",
-    page,
   } = params;
   const query = q.trim().toLowerCase();
   const isRankedView = view === "trending" || view === "leaderboard";
@@ -186,17 +187,10 @@ export async function getSearchResults(
   }
 
   const total = items.length;
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const safePage = Math.min(Math.max(1, page), totalPages);
-  const start = (safePage - 1) * PAGE_SIZE;
-  const pageItems = items.slice(start, start + PAGE_SIZE);
 
   return delay({
-    items: pageItems,
+    items,
     total,
-    page: safePage,
-    pageSize: PAGE_SIZE,
-    totalPages,
   });
 }
 

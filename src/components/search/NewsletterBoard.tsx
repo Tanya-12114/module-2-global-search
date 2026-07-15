@@ -3,14 +3,12 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Mail, Search as SearchIcon, Clock, Sparkles } from "lucide-react";
-import { Pagination } from "@/components/search/Pagination";
 
 // ---------------------------------------------------------------------------
 // Self-contained mock dataset. Newsletter posts aren't a real entity type in
 // the search module yet (see src/types/entities.ts) — this generates a
-// large, deterministic set of posts client-side so the page has enough rows
-// to paginate through. Swap `buildPosts()` for a real fetch once a `post`
-// entity type + API endpoint exist.
+// large, deterministic set of posts client-side. Swap `buildPosts()` for a
+// real fetch once a `post` entity type + API endpoint exist.
 // ---------------------------------------------------------------------------
 
 interface Post {
@@ -140,7 +138,6 @@ function buildPosts(count: number): Post[] {
 const ALL_POSTS = buildPosts(93);
 const FEATURED = ALL_POSTS.slice(0, 3);
 const REST = ALL_POSTS.slice(3);
-const PAGE_SIZE = 9;
 
 function PostThumbnail({ post, tall = false }: { post: Post; tall?: boolean }) {
   return (
@@ -202,7 +199,6 @@ function PostCard({ post, tall = false }: { post: Post; tall?: boolean }) {
 
 export function NewsletterBoard() {
   const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return REST;
@@ -211,14 +207,6 @@ export function NewsletterBoard() {
       (p) => p.headline.toLowerCase().includes(q) || p.excerpt.toLowerCase().includes(q)
     );
   }, [query]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  function handleQueryChange(value: string) {
-    setQuery(value);
-    setPage(1);
-  }
 
   return (
     <div>
@@ -274,28 +262,22 @@ export function NewsletterBoard() {
         />
         <input
           value={query}
-          onChange={(e) => handleQueryChange(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Search"
           className="w-full rounded-md border border-border bg-surface py-2 pl-8 pr-3 text-sm text-text-primary outline-none placeholder:text-text-tertiary hover:border-border-hover focus:border-border-hover"
         />
       </div>
 
       {/* Post grid */}
-      {pageItems.length === 0 ? (
+      {filtered.length === 0 ? (
         <p className="py-10 text-center text-sm text-text-secondary">
           No posts match &ldquo;{query}&rdquo;.
         </p>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {pageItems.map((post) => (
+          {filtered.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
-        </div>
-      )}
-
-      {totalPages > 1 && (
-        <div className="mt-8">
-          <Pagination page={page} totalPages={totalPages} onChange={setPage} />
         </div>
       )}
     </div>

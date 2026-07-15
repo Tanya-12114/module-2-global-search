@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { SearchIcon } from "lucide-react";
 import { ResultsTable } from "@/components/search/ResultsTable";
 import { TrendingList } from "@/components/search/TrendingList";
@@ -17,13 +16,12 @@ import { TasksTable } from "@/components/search/TasksTable";
 import { JobBoard } from "@/components/search/JobBoard";
 import { NewsletterBoard } from "@/components/search/NewsletterBoard";
 import { ForumBoard } from "@/components/search/ForumBoard";
-import { Pagination } from "@/components/search/Pagination";
 import { LoadingState } from "@/components/search/states/LoadingState";
 import { EmptyState } from "@/components/search/states/EmptyState";
 import { ErrorState } from "@/components/search/states/ErrorState";
 import { getSearchResults } from "@/lib/api";
 import { getSectionBySlug, SECTION_DESCRIPTIONS } from "@/lib/sections";
-import { PaginatedResult, SearchEntity, SortOption } from "@/types/entities";
+import { SearchEntity, SortOption } from "@/types/entities";
 
 /** Sub-tabs shown above "gallery" layout sections (e.g. Mini tools), mapped
  *  onto the existing sort options so no new backend concept is needed. */
@@ -36,15 +34,6 @@ const GALLERY_TABS: { label: string; sort: SortOption }[] = [
 export function SectionPageContent({ slug }: { slug: string }) {
   const config = getSectionBySlug(slug);
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = Number(searchParams.get("page") ?? "1") || 1;
-
-  const [data, setData] = useState<PaginatedResult<SearchEntity> | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [retryToken, setRetryToken] = useState(0);
-
   // Only used by the "gallery" layout (Mini tools): its own sort tabs and
   // search box, independent of the global search bar.
   const [gallerySort, setGallerySort] = useState<SortOption>(config?.sort ?? "relevance");
@@ -54,6 +43,12 @@ export function SectionPageContent({ slug }: { slug: string }) {
   // Only used by the "collections" layout: its own New/Popular filter,
   // mapped onto the existing sort options.
   const [collectionsFilter, setCollectionsFilter] = useState<"new" | "popular">("new");
+
+  const [items, setItems] = useState<SearchEntity[]>([]);
+  const [total, setTotal] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [retryToken, setRetryToken] = useState(0);
 
   const isGallery = config?.layout === "gallery";
   const isCollections = config?.layout === "collections";
@@ -71,6 +66,7 @@ export function SectionPageContent({ slug }: { slug: string }) {
       : config?.sort ?? "relevance";
   const effectiveQuery = isGallery ? galleryQuery : "";
 
+  // Refetch the full result set whenever the section, sort, or query changes.
   useEffect(() => {
     if (!config) return;
     let cancelled = false;
@@ -84,10 +80,11 @@ export function SectionPageContent({ slug }: { slug: string }) {
       categories: [],
       sort: effectiveSort,
       view: config.view,
-      page,
     })
       .then((result) => {
-        if (!cancelled) setData(result);
+        if (cancelled) return;
+        setItems(result.items);
+        setTotal(result.total);
       })
       .catch(() => {
         if (!cancelled) setError("Something went wrong while loading this page. Please try again.");
@@ -100,7 +97,9 @@ export function SectionPageContent({ slug }: { slug: string }) {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, page, effectiveSort, effectiveQuery, retryToken]);
+  }, [slug, effectiveSort, effectiveQuery, retryToken]);
+
+  const data = { items, total };
 
   if (!config) return null;
 
@@ -134,10 +133,6 @@ export function SectionPageContent({ slug }: { slug: string }) {
     );
   }
 
-  function setPage(next: number) {
-    router.push(`/search/${slug}?page=${next}`);
-  }
-
   return (
     <main>
       <div className="mx-auto max-w-[90rem] px-4 py-8 sm:px-6 lg:px-8">
@@ -159,10 +154,7 @@ export function SectionPageContent({ slug }: { slug: string }) {
               {GALLERY_TABS.map((tab) => (
                 <button
                   key={tab.label}
-                  onClick={() => {
-                    setGallerySort(tab.sort);
-                    setPage(1);
-                  }}
+                  onClick={() => setGallerySort(tab.sort)}
                   className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${
                     gallerySort === tab.sort
                       ? "bg-text-primary text-bg"
@@ -182,7 +174,6 @@ export function SectionPageContent({ slug }: { slug: string }) {
               onSubmit={(e) => {
                 e.preventDefault();
                 setGalleryQuery(galleryQueryInput);
-                setPage(1);
               }}
             >
               <input
@@ -204,7 +195,7 @@ export function SectionPageContent({ slug }: { slug: string }) {
 
         {!isCollections && !isNewReleases && !isRankings && !isAgents && !isRequests && !isTasksTable && (
           <p className="mb-4 text-sm text-text-secondary">
-            {isLoading ? "Loading…" : `${data?.total ?? 0} results in ${config.label}`}
+            {isLoading ? "Loading…" : `${data.total} results in ${config.label}`}
           </p>
         )}
 
@@ -212,14 +203,10 @@ export function SectionPageContent({ slug }: { slug: string }) {
           <ErrorState message={error} onRetry={() => setRetryToken((t) => t + 1)} />
         ) : isLoading ? (
           <LoadingState />
-        ) : data && data.items.length > 0 ? (
+        ) : data.items.length > 0 ? (
           <>
             {config.layout === "trending" ? (
-              <TrendingList
-                items={data.items}
-                startRank={(data.page - 1) * data.pageSize + 1}
-                sectionLabel={config.label}
-              />
+              <TrendingList items={data.items} startRank={1} sectionLabel={config.label} />
             ) : config.layout === "gallery" ? (
               <MiniToolsList items={data.items} />
             ) : config.layout === "featured" ? (
@@ -229,33 +216,22 @@ export function SectionPageContent({ slug }: { slug: string }) {
                 items={data.items}
                 total={data.total}
                 filter={collectionsFilter}
-                onFilterChange={(f) => {
-                  setCollectionsFilter(f);
-                  setPage(1);
-                }}
+                onFilterChange={setCollectionsFilter}
               />
             ) : config.layout === "characters" ? (
               <CharactersGrid items={data.items} />
             ) : config.layout === "new" ? (
-              <NewReleasesList items={data.items} startRank={(data.page - 1) * data.pageSize + 1} />
+              <NewReleasesList items={data.items} startRank={1} />
             ) : config.layout === "rankings" ? (
-              <RankingsBoard items={data.items} startRank={(data.page - 1) * data.pageSize + 1} />
+              <RankingsBoard items={data.items} startRank={1} />
             ) : config.layout === "agents" ? (
               <AgentsGrid items={data.items} />
             ) : config.layout === "requests" ? (
-              <RequestsList items={data.items} startRank={(data.page - 1) * data.pageSize + 1} />
+              <RequestsList items={data.items} startRank={1} />
             ) : config.layout === "tasksTable" ? (
               <TasksTable items={data.items} total={data.total} />
             ) : (
-              <ResultsTable
-                items={data.items}
-                startRank={(data.page - 1) * data.pageSize + 1}
-              />
-            )}
-            {data.totalPages > 1 && (
-              <div className="mt-6">
-                <Pagination page={data.page} totalPages={data.totalPages} onChange={setPage} />
-              </div>
+              <ResultsTable items={data.items} startRank={1} />
             )}
           </>
         ) : (

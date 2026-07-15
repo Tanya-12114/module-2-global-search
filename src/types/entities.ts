@@ -40,14 +40,6 @@ export type SortOption = "relevance" | "newest" | "popular" | "az";
 /** Primary result view, mirroring TAAFT's "For You / Trending / Leaderboard" tabs. */
 export type SearchView = "forYou" | "trending" | "leaderboard";
 
-export interface PaginatedResult<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}
-
 export interface AutocompleteSuggestion {
   id: string;
   type: EntityType;

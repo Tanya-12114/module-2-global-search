@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FacetCounts, getFacetCounts, getSearchResults } from "@/lib/api";
-import { EntityType, PaginatedResult, SearchEntity, SortOption } from "@/types/entities";
+import { EntityType, SearchEntity, SortOption } from "@/types/entities";
 
 function parseList(param: string | null): string[] {
   if (!param) return [];
@@ -19,10 +19,12 @@ function parseSort(param: string | null): SortOption {
 
 /**
  * Drives the /search/results page: reads q, types, categories, pricing,
- * features, countries, price range, sort and page from the URL — so every
+ * features, countries, price range and sort from the URL — so every
  * filter/tab/sort choice is shareable and back-button-safe, same as TAAFT —
  * fetches matching results plus live facet counts, and exposes setters for
- * each filter dimension.
+ * each filter dimension. All matching results are fetched and shown at
+ * once (no pagination or load-more); any filter/sort/query change simply
+ * refetches the full set.
  */
 export function useSearchResults() {
   const router = useRouter();
@@ -36,14 +38,14 @@ export function useSearchResults() {
   const features = useMemo(() => parseList(searchParams.get("features")), [searchParams]);
   const countries = useMemo(() => parseList(searchParams.get("countries")), [searchParams]);
   const sort = parseSort(searchParams.get("sort"));
-  const page = Number(searchParams.get("page") ?? "1") || 1;
 
   const priceMinParam = searchParams.get("priceMin");
   const priceMaxParam = searchParams.get("priceMax");
   const priceMin = priceMinParam !== null ? Number(priceMinParam) : undefined;
   const priceMax = priceMaxParam !== null ? Number(priceMaxParam) : undefined;
 
-  const [data, setData] = useState<PaginatedResult<SearchEntity> | null>(null);
+  const [items, setItems] = useState<SearchEntity[]>([]);
+  const [total, setTotal] = useState(0);
   const [facets, setFacets] = useState<FacetCounts | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +53,7 @@ export function useSearchResults() {
   const retry = useCallback(() => setRetryToken((t) => t + 1), []);
 
   const updateParams = useCallback(
-    (updates: Record<string, string | null>, resetPage = true) => {
+    (updates: Record<string, string | null>) => {
       const next = new URLSearchParams(searchParams.toString());
       Object.entries(updates).forEach(([key, value]) => {
         if (value === null || value === "") {
@@ -60,7 +62,6 @@ export function useSearchResults() {
           next.set(key, value);
         }
       });
-      if (resetPage) next.delete("page");
       router.push(`${pathname}?${next.toString()}`);
     },
     [router, pathname, searchParams]
@@ -96,11 +97,7 @@ export function useSearchResults() {
     [updateParams]
   );
   const setSort = useCallback(
-    (value: SortOption) => updateParams({ sort: value === "relevance" ? null : value }, false),
-    [updateParams]
-  );
-  const setPage = useCallback(
-    (value: number) => updateParams({ page: String(value) }, false),
+    (value: SortOption) => updateParams({ sort: value === "relevance" ? null : value }),
     [updateParams]
   );
   const clearFilters = useCallback(
@@ -132,6 +129,7 @@ export function useSearchResults() {
   const featuresKey = features.join(",");
   const countriesKey = countries.join(",");
 
+  // Refetch the full result set whenever any filter/sort/query changes.
   useEffect(() => {
     let cancelled = false;
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -150,15 +148,14 @@ export function useSearchResults() {
         priceMax,
         sort,
         view: "forYou",
-        page,
       }),
       getFacetCounts({ q, types, categories, pricing, features, countries, priceMin, priceMax }),
     ])
       .then(([result, facetCounts]) => {
-        if (!cancelled) {
-          setData(result);
-          setFacets(facetCounts);
-        }
+        if (cancelled) return;
+        setItems(result.items);
+        setTotal(result.total);
+        setFacets(facetCounts);
       })
       .catch(() => {
         if (!cancelled) setError("Something went wrong while searching. Please try again.");
@@ -181,9 +178,10 @@ export function useSearchResults() {
     priceMin,
     priceMax,
     sort,
-    page,
     retryToken,
   ]);
+
+  const data = { items, total };
 
   return {
     q,
@@ -195,7 +193,6 @@ export function useSearchResults() {
     priceMin,
     priceMax,
     sort,
-    page,
     data,
     facets,
     isLoading,
@@ -210,7 +207,6 @@ export function useSearchResults() {
     setCountries,
     setPriceRange,
     setSort,
-    setPage,
     clearFilters,
   };
 }
