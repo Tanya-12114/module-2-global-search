@@ -35,7 +35,6 @@ export function EntityTabs({ selected, onChange, counts }: EntityTabsProps) {
       el.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [counts, selected.length]);
 
   function scrollBy(amount: number) {

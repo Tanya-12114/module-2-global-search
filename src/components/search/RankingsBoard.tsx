@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Trophy, SearchIcon, ThumbsUp, ThumbsDown } from "lucide-react";
 import { SearchEntity } from "@/types/entities";
@@ -23,16 +22,23 @@ type Period = (typeof PERIODS)[number];
 function EntityLogo({ entity, size = 36 }: { entity: SearchEntity; size?: number }) {
   const meta = ENTITY_META[entity.type];
   const Icon = meta.icon;
+  const [failed, setFailed] = useState(false);
 
-  if (entity.imageUrl) {
+  if (entity.imageUrl && !failed) {
     return (
-      <Image
+      // Plain <img>, not next/image: imageUrl is a third-party favicon
+      // service that intermittently 404s/times out, which next/image's
+      // server-side optimizer surfaces as a hard fetch error. A runtime
+      // onError fallback needs a plain <img>.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
         src={entity.imageUrl}
         alt=""
         width={size}
         height={size}
         className="shrink-0 rounded-lg object-cover"
         style={{ width: size, height: size }}
+        onError={() => setFailed(true)}
       />
     );
   }

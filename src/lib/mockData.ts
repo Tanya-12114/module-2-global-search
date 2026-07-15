@@ -1,9 +1,13 @@
 import { EntityType, SearchEntity } from "@/types/entities";
 import { REAL_TOOLS } from "@/lib/realTools";
 
-/** Real-brand logo for a tool's domain, via Clearbit's public logo API. */
+/** Real-brand logo for a tool's domain. Clearbit's free Logo API was
+ * permanently shut down on Dec 1, 2025, so this uses Google's public
+ * favicon service instead — no API key or signup required. `sz=128`
+ * asks for the largest size Google will serve (actual favicon quality
+ * varies by site, but it's the best free, keyless option available). */
 export function logoForDomain(domain: string): string {
-  return `https://logo.clearbit.com/${domain}?size=128`;
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 }
 
 // ---------------------------------------------------------------------------
@@ -148,7 +152,20 @@ function pick<T>(arr: T[], rand: () => number): T {
 }
 
 function pickMany<T>(arr: T[], count: number, rand: () => number): T[] {
-  const shuffled = [...arr].sort(() => rand() - 0.5);
+  // Fisher-Yates shuffle. Deliberately NOT `arr.sort(() => rand() - 0.5)`:
+  // that comparator isn't a valid (transitive) comparator, so the number of
+  // times it gets invoked is implementation-defined and can differ between
+  // JS engines (e.g. Node's V8 build vs. a browser's V8 build). Since every
+  // entity in this file pulls from one shared seeded `rand()` sequence, an
+  // engine-dependent number of rand() calls here desyncs every value
+  // generated afterward between server and client, causing React hydration
+  // mismatches. Fisher-Yates always calls rand() exactly arr.length - 1
+  // times, so the sequence stays in lockstep on every engine.
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
   return shuffled.slice(0, count);
 }
 

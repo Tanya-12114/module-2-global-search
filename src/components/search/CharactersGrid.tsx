@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
@@ -30,15 +31,22 @@ function deriveCharacterSignals(entity: SearchEntity) {
 function Avatar({ entity, portrait }: { entity: SearchEntity; portrait: string }) {
   const meta = ENTITY_META[entity.type];
   const Icon = meta.icon;
+  const [failed, setFailed] = useState(false);
 
-  if (entity.imageUrl) {
+  if (entity.imageUrl && !failed) {
     return (
-      <Image
+      // Plain <img>, not next/image: imageUrl is a third-party favicon
+      // service that intermittently 404s/times out, which next/image's
+      // server-side optimizer surfaces as a hard fetch error. A runtime
+      // onError fallback needs a plain <img>.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
         src={entity.imageUrl}
         alt=""
         width={56}
         height={56}
         className="h-14 w-14 shrink-0 rounded-full object-cover"
+        onError={() => setFailed(true)}
       />
     );
   }
